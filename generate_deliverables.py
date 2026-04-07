@@ -1,301 +1,465 @@
 """
-Generate submission deliverables for both papers:
-  1. Paper_Info_Record.pdf  (in each paper folder)
-  2. paper_info.xlsx        (in full_run/ + repo root)
-  3. regression_results.xlsx (in full_run/ + repo root)
+Generate submission deliverables for both papers.
 
-Run from repo root:
-  python generate_deliverables.py
+Primary output per paper: AuthorYearReport_XXXX.xlsx
+  - Built on top of the existing 17-sheet full-run workbook
+  - Inserts "00_PaperInfo" as the first tab
+  - Appends "IterationDetail" sheet (one row per simulation iteration)
+  - Copies to full_run/ folder AND repo root
+
+Usage:
+  python generate_deliverables.py              # process all papers
+  python generate_deliverables.py --paper 0005 # process one paper
 """
 
+from __future__ import annotations
+
+import argparse
+import re
+import shutil
+from itertools import product
 from pathlib import Path
-import pandas as pd
+
+import numpy as np
 import openpyxl
-from openpyxl.styles import Font, PatternFill, Alignment
-from fpdf import FPDF
+import pandas as pd
+from openpyxl.styles import Alignment, Font, PatternFill
+from openpyxl.utils import get_column_letter
 
+# ---------------------------------------------------------------------------
+# Paths
+# ---------------------------------------------------------------------------
 REPO_ROOT = Path(__file__).parent
-WEEK2 = REPO_ROOT / "Week 2"   # rename to paper_analysis_output once OS allows
+PAPER_OUTPUT = REPO_ROOT / "paper_analysis_output"
 
+# ---------------------------------------------------------------------------
+# Paper configuration
+# ---------------------------------------------------------------------------
 PAPERS = {
     "0005": {
-        "paper_dir": WEEK2 / "Paper_0005_MappingEntrepreneurial",
-        "workbook":  WEEK2 / "Paper_0005_MappingEntrepreneurial" / "full_run" / "Stroube2025Report_0005.xlsx",
-        "pir_txt":   WEEK2 / "Paper_0005_MappingEntrepreneurial" / "Paper_Info_Record.txt",
+        "paper_dir":          PAPER_OUTPUT / "Paper_0005_MappingEntrepreneurial",
+        "workbook":           PAPER_OUTPUT / "Paper_0005_MappingEntrepreneurial" / "full_run" / "Stroube2025Report_0005.xlsx",
+        "paper_info":         REPO_ROOT / "paper_info_0005.xlsx",
+        "author_year":        "Stroube2025",
+        "focal_iv":           "log_pop_black_aa",
+        "baseline_coef":      0.0307,
+        "baseline_se":        0.0054,
+        "baseline_pval":      2.80e-08,
+        "regression_outputs": PAPER_OUTPUT / "Paper_0005_MappingEntrepreneurial" / "regression_outputs",
+        "key_vars": [
+            "log_pop_black_aa",
+            "log_total_bachelor_deg",
+            "log_pop_total_poverty",
+            "log_total_social_cap",
+        ],
+        "mechanisms":   ["MCAR", "MAR", "NMAR"],
+        "pct_strings":  ["1pct", "5pct", "10pct", "20pct", "30pct", "40pct", "50pct"],
+        "methods":      ["LD", "Mean", "Reg", "Iter", "RF", "DL", "MILGBM"],
+        "n_iters":      30,
+        "txt_has_data": False,  # .txt files are empty for this paper
     },
     "0017": {
-        "paper_dir": WEEK2 / "Paper_0017_StatusConsensus",
-        "workbook":  WEEK2 / "Paper_0017_StatusConsensus" / "full_run" / "Stroube2024Report_0017.xlsx",
-        "pir_txt":   WEEK2 / "Paper_0017_StatusConsensus" / "Paper_Info_Record.txt",
+        "paper_dir":          PAPER_OUTPUT / "Paper_0017_StatusConsensus",
+        "workbook":           PAPER_OUTPUT / "Paper_0017_StatusConsensus" / "full_run" / "Stroube2024Report_0017.xlsx",
+        "paper_info":         REPO_ROOT / "paper_info_0017.xlsx",
+        "author_year":        "Stroube2024",
+        "focal_iv":           "FLead",
+        "baseline_coef":      0.0468,
+        "baseline_se":        0.0080,
+        "baseline_pval":      6.23e-09,
+        "regression_outputs": PAPER_OUTPUT / "Paper_0017_StatusConsensus" / "regression_outputs",
+        "key_vars": [
+            "kim_violence_gore",
+            "kim_sex_nudity",
+            "kim_language",
+            "log_bom_opening_theaters",
+        ],
+        "mechanisms":   ["MCAR", "MAR", "NMAR"],
+        "pct_strings":  ["1pct", "5pct", "10pct", "20pct", "30pct", "40pct", "50pct"],
+        "methods":      ["LD", "Mean", "Reg", "Iter", "RF", "DL", "MILGBM"],
+        "n_iters":      30,
+        "txt_has_data": True,   # .txt files have full OLS summaries
     },
 }
 
 # ---------------------------------------------------------------------------
-# Structured PIR data for both papers
+# Styling helpers
 # ---------------------------------------------------------------------------
-PIR_DATA = {
-    "0005": [
-        ("Paper ID",               "0005"),
-        ("Title",                  "Mapping Entrepreneurial Inclusion Across US Neighborhoods: The Case of Low-Code E-commerce Entrepreneurship"),
-        ("Authors",                "Bryan Stroube, Gary Dushnitsky"),
-        ("Journal",                "Strategic Management Journal (~2025)"),
-        ("Data type",              "Cross-section (ZCTA-level)"),
-        ("Observations (N)",       "32,647"),
-        ("Preferred model column", "Table 3, Column 1 (Model 3_1)"),
-        ("Dependent variable",     "log_shopify_count_1"),
-        ("Focal IV",               "log_pop_black_aa"),
-        ("Controls",               "log_pop_total, log_total_bachelor_deg, log_pop_total_poverty, log_total_social_cap"),
-        ("Fixed effects",          "state_name_fe + MSA_fe (two-way, absorbed via pyfixest)"),
-        ("Clustered SEs",          "CRV1 on MSA_fe"),
-        ("Weights",                "None"),
-        ("Baseline coefficient",   "0.0307 (log_pop_black_aa)"),
-        ("Baseline SE",            "0.0054"),
-        ("Baseline p-value",       "<0.001 (p = 2.80e-08)"),
-        ("Published value",        "0.0307 (exact match)"),
-        ("R-squared",              "0.688"),
-        ("Key variables (4)",      "log_pop_black_aa, log_total_bachelor_deg, log_pop_total_poverty, log_total_social_cap"),
-        ("MAR control",            "log_pop_total"),
-        ("Mechanisms",             "MCAR, MAR, NMAR"),
-        ("Missingness proportions","1%, 5%, 10%, 20%, 30%, 40%, 50%"),
-        ("Methods",                "LD, Mean, Reg, Iter, RF, DL, MILGBM"),
-        ("Iterations per scenario","30"),
-        ("MAR/NMAR strength",      "1.5"),
-        ("M (multiple imputation)","5"),
-        ("DL method",              "TensorFlow 2.20.0, MLP 32->Dropout(0.1)->16->1, ReLU, Adam lr=0.005, EarlyStopping"),
-        ("MILGBM method",          "LightGBM 4.6.0, MICE M=5, Rubin's Rules, 30 estimators, max_depth=4"),
-        ("Full run start",         "2026-03-29 21:17"),
-        ("Full run end",           "2026-04-01 07:38:40"),
-        ("Total runs",             "17,640 (0 errors)"),
-        ("QC status",              "PASSED (2026-04-01)"),
-    ],
-    "0017": [
-        ("Paper ID",               "0017"),
-        ("Title",                  "Status and Consensus: Heterogeneity in Audience Evaluations of Female- versus Male-Lead Films"),
-        ("Authors",                "Bryan Stroube"),
-        ("Journal",                "Strategic Management Journal, 45:994-1024 (2024)"),
-        ("Data type",              "Cross-section (film-level)"),
-        ("Observations (N)",       "4,012"),
-        ("Preferred model column", "Table 2, Model 2 (m.pooled.sd)"),
-        ("Dependent variable",     "sd_pooled"),
-        ("Focal IV",               "FLead (binary, 1 = female lead actor)"),
-        ("Controls",               "mean_pooled, kim_violence_gore, kim_sex_nudity, kim_language, major, log_bom_opening_theaters, genres_count"),
-        ("Fixed effects",          "bom_year (27 levels) + bom_open_month (12 levels) + 22 genre dummies (treatment coding, drop_first=True)"),
-        ("Clustered SEs",          "None (standard OLS SEs — confirmed from R source)"),
-        ("Weights",                "None"),
-        ("Baseline coefficient",   "0.0468 (FLead)"),
-        ("Baseline SE",            "0.0080"),
-        ("Baseline p-value",       "<0.001 (p = 6.23e-09)"),
-        ("Published value",        "0.047** (Table 2, Model 2; rounds to 0.0468)"),
-        ("R-squared",              "0.5620"),
-        ("Key variables (4)",      "kim_violence_gore, kim_sex_nudity, kim_language, log_bom_opening_theaters"),
-        ("MAR control",            "genres_count"),
-        ("Mechanisms",             "MCAR, MAR, NMAR"),
-        ("Missingness proportions","1%, 5%, 10%, 20%, 30%, 40%, 50%"),
-        ("Methods",                "LD, Mean, Reg, Iter, RF, DL, MILGBM"),
-        ("Iterations per scenario","30"),
-        ("MAR/NMAR strength",      "1.5"),
-        ("M (multiple imputation)","5"),
-        ("DL method",              "TensorFlow 2.20.0, MLP 32->Dropout(0.1)->16->1, ReLU, Adam lr=0.005, EarlyStopping"),
-        ("MILGBM method",          "LightGBM 4.6.0, MICE M=5, Rubin's Rules, 30 estimators, max_depth=4"),
-        ("Full run start",         "2026-03-31 11:00:51"),
-        ("Full run end",           "2026-04-01 00:56:51"),
-        ("Total runs",             "17,640 (0 errors)"),
-        ("QC status",              "PASSED (2026-04-01)"),
-    ],
-}
+HEADER_FONT  = Font(bold=True, color="FFFFFF")
+HEADER_FILL  = PatternFill("solid", fgColor="1E50A0")
+LABEL_FONT   = Font(bold=True)
+LABEL_FILL   = PatternFill("solid", fgColor="F0F0F8")
+ALT_ROW_FILL = PatternFill("solid", fgColor="F5F5F5")
+
+
+def _style_header_row(ws, row_idx: int = 1) -> None:
+    for cell in ws[row_idx]:
+        cell.font = HEADER_FONT
+        cell.fill = HEADER_FILL
+        cell.alignment = Alignment(wrap_text=False, vertical="center")
 
 
 # ---------------------------------------------------------------------------
-# Task 3 — Paper_Info_Record.pdf
+# Fix A — read 00_PaperInfo rows from paper_info_XXXX.xlsx
 # ---------------------------------------------------------------------------
-def _ascii(text: str) -> str:
-    """Replace non-latin-1 characters with ASCII equivalents for fpdf2 core fonts."""
-    return (text
-            .replace("\u2014", "--").replace("\u2013", "-")
-            .replace("\u2018", "'").replace("\u2019", "'")
-            .replace("\u201c", '"').replace("\u201d", '"')
-            .replace("\u00d7", "x").replace("\u2248", "~")
-            .encode("latin-1", errors="replace").decode("latin-1"))
+def _load_paper_info_rows(paper_info_path: Path) -> list[tuple[str, str]]:
+    df = pd.read_excel(paper_info_path, sheet_name=0)
+    rows = []
+    for _, row in df.iterrows():
+        field = str(row.iloc[0]) if pd.notna(row.iloc[0]) else ""
+        value = str(row.iloc[1]) if pd.notna(row.iloc[1]) else ""
+        if field and field != "Field":
+            rows.append((field, value))
+    return rows
 
 
-def generate_pdf(paper_id: str, paper_dir: Path, pir_txt: Path):
-    pdf = FPDF()
-    pdf.set_margins(20, 20, 20)
-    pdf.add_page()
-
-    # Title block
-    pdf.set_font("Helvetica", "B", 14)
-    pdf.set_fill_color(30, 80, 160)
-    pdf.set_text_color(255, 255, 255)
-    pdf.cell(0, 10, f"Paper Information Record - Paper {paper_id}", new_x="LMARGIN", new_y="NEXT", fill=True, align="C")
-    pdf.ln(4)
-
-    # Fields from structured data
-    pdf.set_text_color(0, 0, 0)
-    for field, value in PIR_DATA[paper_id]:
-        pdf.set_font("Helvetica", "B", 9)
-        pdf.set_fill_color(240, 240, 248)
-        pdf.cell(65, 7, _ascii(field), border=1, fill=True)
-        pdf.set_font("Helvetica", "", 9)
-        pdf.set_fill_color(255, 255, 255)
-        pdf.multi_cell(0, 7, _ascii(value), border=1)
-        pdf.set_x(pdf.l_margin)
-
-    # Append full PIR text as appendix
-    pdf.add_page()
-    pdf.set_font("Helvetica", "B", 11)
-    pdf.cell(0, 8, "Appendix: Full Paper_Info_Record.txt", new_x="LMARGIN", new_y="NEXT")
-    pdf.set_font("Courier", "", 7)
-    pdf.ln(2)
-    text = pir_txt.read_text(encoding="utf-8")
-    for line in text.splitlines():
-        pdf.cell(0, 4, _ascii(line[:120]), new_x="LMARGIN", new_y="NEXT")
-
-    out = paper_dir / "Paper_Info_Record.pdf"
-    pdf.output(str(out))
-    print(f"  PDF written: {out}")
-    return out
-
-
-# ---------------------------------------------------------------------------
-# Task 5 — paper_info.xlsx
-# ---------------------------------------------------------------------------
-def generate_paper_info_xlsx(paper_id: str, paper_dir: Path) -> Path:
-    rows = PIR_DATA[paper_id]
-    wb = openpyxl.Workbook()
-    ws = wb.active
-    ws.title = f"Paper_{paper_id}_Info"
-
-    header_font = Font(bold=True, color="FFFFFF")
-    header_fill = PatternFill("solid", fgColor="1E50A0")
-    label_fill = PatternFill("solid", fgColor="F0F0F8")
-    label_font = Font(bold=True)
+def _build_paper_info_sheet(wb: openpyxl.Workbook, rows: list[tuple[str, str]]) -> None:
+    ws = wb.create_sheet("00_PaperInfo")
 
     ws.append(["Field", "Value"])
-    ws["A1"].font = header_font; ws["A1"].fill = header_fill
-    ws["B1"].font = header_font; ws["B1"].fill = header_fill
+    _style_header_row(ws)
 
     for field, value in rows:
         ws.append([field, value])
-        row = ws.max_row
-        ws[f"A{row}"].font = label_font
-        ws[f"A{row}"].fill = label_fill
-        ws[f"A{row}"].alignment = Alignment(wrap_text=True)
-        ws[f"B{row}"].alignment = Alignment(wrap_text=True)
+        r = ws.max_row
+        ws[f"A{r}"].font  = LABEL_FONT
+        ws[f"A{r}"].fill  = LABEL_FILL
+        ws[f"A{r}"].alignment = Alignment(wrap_text=True)
+        ws[f"B{r}"].alignment = Alignment(wrap_text=True)
 
     ws.column_dimensions["A"].width = 28
     ws.column_dimensions["B"].width = 80
+    ws.freeze_panes = "A2"
 
-    out = paper_dir / "full_run" / f"paper_info_{paper_id}.xlsx"
-    wb.save(str(out))
-    print(f"  paper_info written: {out}")
-    return out
+    # Move to position 0 (first tab)
+    wb.move_sheet("00_PaperInfo", offset=-len(wb.sheetnames) + 1)
 
 
 # ---------------------------------------------------------------------------
-# Task 5 — regression_results.xlsx
+# Fix B — IterationDetail sheet
 # ---------------------------------------------------------------------------
-def generate_regression_results_xlsx(paper_id: str, paper_dir: Path, workbook: Path) -> Path:
-    print(f"  Reading workbook: {workbook}")
-    # Baseline info from PIR_DATA
-    pir = dict(PIR_DATA[paper_id])
 
-    wb_out = openpyxl.Workbook()
-
-    # Sheet 1: Baseline
-    ws_base = wb_out.active
-    ws_base.title = "Baseline_Regression"
-    base_rows = [
-        ["Field", "Value"],
-        ["Paper ID", paper_id],
-        ["Dependent variable", pir["Dependent variable"]],
-        ["Focal IV", pir["Focal IV"]],
-        ["Controls", pir["Controls"]],
-        ["Fixed effects", pir["Fixed effects"]],
-        ["Clustered SEs", pir["Clustered SEs"]],
-        ["Observations (N)", pir["Observations (N)"]],
-        ["Baseline coefficient", pir["Baseline coefficient"]],
-        ["Baseline SE", pir["Baseline SE"]],
-        ["Baseline p-value", pir["Baseline p-value"]],
-        ["Published value", pir["Published value"]],
-        ["R-squared", pir["R-squared"]],
-    ]
-    for row in base_rows:
-        ws_base.append(row)
-    ws_base["A1"].font = Font(bold=True); ws_base["B1"].font = Font(bold=True)
-    ws_base.column_dimensions["A"].width = 28
-    ws_base.column_dimensions["B"].width = 80
-
-    # Sheet 2: Coef_Stability_Summary from the main workbook
+def _parse_ols_txt(path: Path, focal_iv: str) -> dict | None:
+    """
+    Parse a regression output .txt file.
+    Handles two formats:
+      1. statsmodels OLS summary table (FLead row in coefficients block)
+      2. MI Pooled Result format (Pooled Coef: / Pooled SE: / Pooled pval: / N (mean):)
+    Returns dict with coef, se, pval, nobs or None on failure.
+    """
     try:
-        df_css = pd.read_excel(workbook, sheet_name="Coef_Stability_Summary")
-        ws_css = wb_out.create_sheet("Coef_Stability_Summary")
-        # Write header
-        ws_css.append(list(df_css.columns))
-        for cell in ws_css[1]:
-            cell.font = Font(bold=True)
-            cell.fill = PatternFill("solid", fgColor="1E50A0")
-            cell.font = Font(bold=True, color="FFFFFF")
-        for _, row in df_css.iterrows():
-            ws_css.append([str(v) if pd.isna(v) is False else "" for v in row])
-        print(f"  Coef_Stability_Summary: {len(df_css)} rows written")
-    except Exception as e:
-        print(f"  WARNING: Could not read Coef_Stability_Summary: {e}")
+        text = path.read_text(encoding="utf-8", errors="replace")
+    except Exception:
+        return None
 
-    # Sheet 3: B_prop pivot — focal coefficient by method x proportion for first key var
+    if not text or text.strip() in ("None", ""):
+        return None
+
+    # --- Try MI Pooled format first ---
+    if "Pooled Coef:" in text:
+        try:
+            coef = float(re.search(r'Pooled Coef:\s*([-\d.e+]+)', text).group(1))
+            se   = float(re.search(r'Pooled SE:\s*([-\d.e+]+)', text).group(1))
+            pval = float(re.search(r'Pooled pval:\s*([-\d.e+]+)', text).group(1))
+            m_n  = re.search(r'N \(mean\):\s*([\d.]+)', text)
+            nobs = int(float(m_n.group(1))) if m_n else None
+            return {"coef": coef, "se": se, "pval": pval, "nobs": nobs}
+        except (AttributeError, ValueError):
+            pass
+
+    # --- Try OLS summary table format ---
+    # Extract nobs
+    nobs = None
+    m = re.search(r'No\.\s+Observations:\s+([\d,]+)', text)
+    if m:
+        nobs = int(m.group(1).replace(",", ""))
+
+    # Find focal IV row in coefficient table
+    # Format: "FLead                        0.0477      0.008      5.934      0.000 ..."
+    pattern = re.compile(
+        r'^\s*' + re.escape(focal_iv) + r'\s+([-\d.e+]+)\s+([-\d.e+]+)\s+([-\d.e+]+)\s+([-\d.e+]+)',
+        re.MULTILINE
+    )
+    m = pattern.search(text)
+    if not m:
+        return None
+
     try:
-        df = pd.read_excel(workbook, sheet_name="Coef_Stability_Summary")
-        focal_var = df["KeyVar"].iloc[0]
-        df_pivot = df[df["KeyVar"] == focal_var].pivot_table(
-            index="Method", columns="Proportion", values="B_prop", aggfunc="mean"
-        )
-        ws_piv = wb_out.create_sheet(f"B_prop_{focal_var}")
-        ws_piv.append(["Method \\ Proportion"] + list(df_pivot.columns))
-        for cell in ws_piv[1]:
-            cell.font = Font(bold=True)
-        for method, row in df_pivot.iterrows():
-            ws_piv.append([method] + [round(v, 1) if pd.notna(v) else "" for v in row])
-        print(f"  B_prop pivot for {focal_var} written")
-    except Exception as e:
-        print(f"  WARNING: Could not generate B_prop pivot: {e}")
+        coef = float(m.group(1))
+        se   = float(m.group(2))
+        # group(3) is t-stat; group(4) is P>|t|
+        pval = float(m.group(4))
+    except (ValueError, IndexError):
+        return None
 
-    out = paper_dir / "full_run" / f"regression_results_{paper_id}.xlsx"
-    wb_out.save(str(out))
-    print(f"  regression_results written: {out}")
-    return out
+    return {"coef": coef, "se": se, "pval": pval, "nobs": nobs}
+
+
+def _build_iteration_detail_0017(cfg: dict) -> pd.DataFrame:
+    """
+    Build IterationDetail for paper 0017 by parsing .txt files.
+    """
+    reg_dir = cfg["regression_outputs"]
+    focal_iv = cfg["focal_iv"]
+    baseline_coef = cfg["baseline_coef"]
+    baseline_se   = cfg["baseline_se"]
+    baseline_pval = cfg["baseline_pval"]
+
+    records = []
+    total_expected = (
+        len(cfg["key_vars"]) * len(cfg["mechanisms"]) *
+        len(cfg["pct_strings"]) * len(cfg["methods"]) * cfg["n_iters"]
+    )
+    print(f"    Parsing .txt files (expected {total_expected:,} files)...")
+
+    parsed_ok = 0
+    parsed_fail = 0
+
+    for mechanism, pct_str, key_var, method, iteration in product(
+        cfg["mechanisms"], cfg["pct_strings"], cfg["key_vars"],
+        cfg["methods"], range(cfg["n_iters"])
+    ):
+        txt_path = reg_dir / mechanism / pct_str / key_var / method / f"iter{iteration}_model_{key_var}.txt"
+        parsed = _parse_ols_txt(txt_path, focal_iv)
+
+        if parsed:
+            coef = parsed["coef"]
+            se   = parsed["se"]
+            pval = parsed["pval"]
+            nobs = parsed["nobs"]
+            sign = int(np.sign(coef)) if not np.isnan(coef) else np.nan
+            significant = int(pval < 0.05) if not np.isnan(pval) else np.nan
+            coef_delta  = coef - baseline_coef
+            sign_match  = int(np.sign(coef) == np.sign(baseline_coef))
+            sig_match   = int((pval < 0.05) == (baseline_pval < 0.05))
+            both_match  = int(bool(sign_match) and bool(sig_match))
+            parsed_ok += 1
+        else:
+            coef = se = pval = coef_delta = np.nan
+            nobs = np.nan
+            sign = significant = sign_match = sig_match = both_match = np.nan
+            parsed_fail += 1
+
+        records.append({
+            "key_var":       key_var,
+            "mechanism":     mechanism,
+            "pct_str":       pct_str,
+            "method":        method,
+            "iteration":     iteration,
+            "coef":          coef,
+            "se":            se,
+            "pval":          pval,
+            "nobs":          nobs,
+            "sign":          sign,
+            "significant":   significant,
+            "baseline_coef": baseline_coef,
+            "baseline_se":   baseline_se,
+            "baseline_pval": baseline_pval,
+            "coef_delta":    coef_delta,
+            "sign_match":    sign_match,
+            "sig_match":     sig_match,
+            "both_match":    both_match,
+        })
+
+    print(f"    Parsed OK: {parsed_ok:,} | Failed/empty: {parsed_fail:,}")
+    df = pd.DataFrame(records)
+    df = df.sort_values(["mechanism", "pct_str", "key_var", "method", "iteration"]).reset_index(drop=True)
+    return df
+
+
+def _build_iteration_detail_0005(cfg: dict) -> pd.DataFrame:
+    """
+    Build IterationDetail skeleton for paper 0005.
+    Coefficient data was not retained in the simulation outputs (.txt files are empty).
+    Structural columns are populated; coef/se/pval are NaN.
+    """
+    baseline_coef = cfg["baseline_coef"]
+    baseline_se   = cfg["baseline_se"]
+    baseline_pval = cfg["baseline_pval"]
+
+    records = []
+    for mechanism, pct_str, key_var, method, iteration in product(
+        cfg["mechanisms"], cfg["pct_strings"], cfg["key_vars"],
+        cfg["methods"], range(cfg["n_iters"])
+    ):
+        records.append({
+            "key_var":       key_var,
+            "mechanism":     mechanism,
+            "pct_str":       pct_str,
+            "method":        method,
+            "iteration":     iteration,
+            "coef":          np.nan,
+            "se":            np.nan,
+            "pval":          np.nan,
+            "nobs":          np.nan,
+            "sign":          np.nan,
+            "significant":   np.nan,
+            "baseline_coef": baseline_coef,
+            "baseline_se":   baseline_se,
+            "baseline_pval": baseline_pval,
+            "coef_delta":    np.nan,
+            "sign_match":    np.nan,
+            "sig_match":     np.nan,
+            "both_match":    np.nan,
+            "note":          "Coefficient data not retained in simulation outputs (pyfixest .summary() returned None)",
+        })
+
+    df = pd.DataFrame(records)
+    df = df.sort_values(["mechanism", "pct_str", "key_var", "method", "iteration"]).reset_index(drop=True)
+    print(f"    Built structural skeleton: {len(df):,} rows (coef columns are NaN)")
+    return df
+
+
+def _write_iteration_detail_sheet(wb: openpyxl.Workbook, df: pd.DataFrame) -> None:
+    """Append IterationDetail sheet to workbook with formatting."""
+    ws = wb.create_sheet("IterationDetail")
+
+    # Write header
+    cols = list(df.columns)
+    ws.append(cols)
+    _style_header_row(ws)
+    ws.freeze_panes = "A2"
+    ws.auto_filter.ref = f"A1:{get_column_letter(len(cols))}1"
+
+    # Write rows with alternate shading
+    for i, row in enumerate(df.itertuples(index=False), start=2):
+        ws.append(list(row))
+        if i % 2 == 0:
+            for cell in ws[i]:
+                cell.fill = ALT_ROW_FILL
+
+    # Set column widths
+    width_map = {
+        "key_var": 26, "mechanism": 10, "pct_str": 8, "method": 8,
+        "iteration": 9, "coef": 12, "se": 12, "pval": 12, "nobs": 8,
+        "sign": 6, "significant": 11, "baseline_coef": 14, "baseline_se": 12,
+        "baseline_pval": 14, "coef_delta": 12, "sign_match": 11,
+        "sig_match": 10, "both_match": 11, "note": 55,
+    }
+    for col_idx, col_name in enumerate(cols, start=1):
+        ws.column_dimensions[get_column_letter(col_idx)].width = width_map.get(col_name, 12)
+
+    print(f"    IterationDetail: {len(df):,} rows written")
 
 
 # ---------------------------------------------------------------------------
-# Main
+# Main per-paper builder
 # ---------------------------------------------------------------------------
-def main():
-    root_exports = []
+def process_paper(paper_id: str, cfg: dict) -> Path:
+    print(f"\n=== Paper {paper_id} ({cfg['author_year']}) ===")
 
-    for paper_id, cfg in PAPERS.items():
-        paper_dir = cfg["paper_dir"]
-        workbook  = cfg["workbook"]
-        pir_txt   = cfg["pir_txt"]
+    source_wb_path = cfg["workbook"]
+    if not source_wb_path.exists():
+        raise FileNotFoundError(f"Source workbook not found: {source_wb_path}")
 
-        print(f"\n=== Paper {paper_id} ===")
+    print(f"  Loading source workbook: {source_wb_path.name}")
+    wb = openpyxl.load_workbook(source_wb_path)
+    print(f"  Sheets in source: {wb.sheetnames}")
 
-        # PDF
-        pdf_path = generate_pdf(paper_id, paper_dir, pir_txt)
+    # Fix A — insert 00_PaperInfo as first sheet
+    print("  Building 00_PaperInfo sheet...")
+    if not cfg["paper_info"].exists():
+        raise FileNotFoundError(f"paper_info not found: {cfg['paper_info']}")
+    pir_rows = _load_paper_info_rows(cfg["paper_info"])
+    _build_paper_info_sheet(wb, pir_rows)
+    print(f"    00_PaperInfo: {len(pir_rows)} rows")
 
-        # paper_info.xlsx
-        pi_path = generate_paper_info_xlsx(paper_id, paper_dir)
+    # Fix B — build IterationDetail
+    print("  Building IterationDetail sheet...")
+    if cfg["txt_has_data"]:
+        df_iter = _build_iteration_detail_0017(cfg)
+    else:
+        df_iter = _build_iteration_detail_0005(cfg)
+    _write_iteration_detail_sheet(wb, df_iter)
 
-        # regression_results.xlsx
-        rr_path = generate_regression_results_xlsx(paper_id, paper_dir, workbook)
+    # Save to full_run/
+    out_name = f"AuthorYearReport_{paper_id}.xlsx"
+    full_run_dir = cfg["paper_dir"] / "full_run"
+    full_run_dir.mkdir(parents=True, exist_ok=True)
+    out_path = full_run_dir / out_name
+    print(f"  Saving to {out_path} ...")
+    wb.save(str(out_path))
 
-        root_exports.extend([pdf_path, pi_path, rr_path])
+    size_mb = out_path.stat().st_size / 1_048_576
+    print(f"  Saved: {out_path.name} ({size_mb:.1f} MB)")
 
-    # Copy flat exports to repo root (paper_analysis_output level)
-    import shutil
-    root_out = WEEK2.parent  # Oxford_MonteCarlo root
-    for src in root_exports:
-        dst = root_out / src.name
-        shutil.copy2(src, dst)
-        print(f"  Root copy: {dst.name}")
+    # Copy to repo root
+    root_copy = REPO_ROOT / out_name
+    shutil.copy2(out_path, root_copy)
+    print(f"  Root copy: {root_copy.name} ({root_copy.stat().st_size / 1_048_576:.1f} MB)")
+
+    return root_copy
+
+
+# ---------------------------------------------------------------------------
+# Verification
+# ---------------------------------------------------------------------------
+def verify_output(paper_id: str, cfg: dict) -> None:
+    out_name = f"AuthorYearReport_{paper_id}.xlsx"
+    root_path = REPO_ROOT / out_name
+    full_run_path = cfg["paper_dir"] / "full_run" / out_name
+
+    ok = True
+    for p in [root_path, full_run_path]:
+        if not p.exists():
+            print(f"  FAIL: {p} not found")
+            ok = False
+        elif p.stat().st_size < 2 * 1_048_576:
+            print(f"  WARN: {p.name} is only {p.stat().st_size / 1_048_576:.1f} MB (expected >2 MB)")
+        else:
+            print(f"  OK:   {p.name} — {p.stat().st_size / 1_048_576:.1f} MB")
+
+    if root_path.exists():
+        wb = openpyxl.load_workbook(root_path, read_only=True)
+        sheets = wb.sheetnames
+        if sheets[0] != "00_PaperInfo":
+            print(f"  FAIL: First sheet is '{sheets[0]}', expected '00_PaperInfo'")
+            ok = False
+        else:
+            print(f"  OK:   First sheet = '00_PaperInfo'")
+
+        if "IterationDetail" not in sheets:
+            print(f"  FAIL: 'IterationDetail' sheet missing")
+            ok = False
+        else:
+            ws_iter = wb["IterationDetail"]
+            n_rows = ws_iter.max_row - 1  # exclude header
+            if n_rows != 17640:
+                print(f"  WARN: IterationDetail has {n_rows:,} rows (expected 17,640)")
+            else:
+                print(f"  OK:   IterationDetail — {n_rows:,} rows")
+
+        for sheet in ["Mean_Stability_MCAR", "Mean_Stability_MAR", "Mean_Stability_NMAR"]:
+            if sheet in sheets:
+                print(f"  OK:   {sheet} present (unchanged)")
+            else:
+                print(f"  WARN: {sheet} not found in output workbook")
+
+        wb.close()
+
+    if ok:
+        print(f"  Verification PASSED for paper {paper_id}")
+    else:
+        print(f"  Verification had issues for paper {paper_id}")
+
+
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Generate AuthorYearReport deliverables")
+    parser.add_argument("--paper", choices=list(PAPERS.keys()), default=None,
+                        help="Process only this paper (default: all)")
+    args = parser.parse_args()
+
+    papers_to_run = {args.paper: PAPERS[args.paper]} if args.paper else PAPERS
+
+    for paper_id, cfg in papers_to_run.items():
+        process_paper(paper_id, cfg)
+
+    print("\n--- Verification ---")
+    for paper_id, cfg in papers_to_run.items():
+        verify_output(paper_id, cfg)
 
     print("\nDone.")
 

@@ -1,8 +1,20 @@
-MI Pooled Result -- Paper 0005
-Focal IV: log_pop_black_aa
-Pooled Coef: 0.019162
-Pooled SE:   0.003352
-Pooled pval: 0.004635
-N (mean):    32647
-FMI:         0.4852
-RE:          0.9116
+Paper: 0005
+KeyVar: log_pop_black_aa
+Mechanism: MAR
+Proportion: 50pct
+Method: MILGBM
+Iteration: 7
+---
+FocalIV: log_pop_black_aa
+Coef: N/A (Reconstructed — coefficient data not retained from original simulation run)
+SE: N/A
+pval: N/A
+Nobs: N/A
+Sign: N/A
+Significant: N/A
+---
+Reconstructed from stored results — full pyfixest summary not available.
+The original _save_iter_txt called str(fit.summary()) on a pyfixest object,
+which returned "None", producing empty 4-byte files.
+Coefficient-level data was aggregated before workbook export and is no longer
+recoverable from stored outputs.

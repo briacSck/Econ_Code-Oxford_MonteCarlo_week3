@@ -419,24 +419,60 @@ def _extract_focal_coef(fit) -> dict:
         return None
 
 
-def _save_iter_txt(fit, path: Path) -> None:
+def _save_iter_txt(fit, path: Path, key_var: str, mechanism: str,
+                   pct_str: str, method: str, iteration: int) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     try:
-        if getattr(fit, "_is_pooled_mi", False):
-            content = (
-                f"MI Pooled Result -- Paper 0017\n"
-                f"Focal IV: {Config.FOCAL_IV}\n"
-                f"Pooled Coef: {fit._pooled_coef:.6f}\n"
-                f"Pooled SE:   {fit._pooled_se:.6f}\n"
-                f"Pooled pval: {fit._pooled_pval:.6f}\n"
-                f"N (mean):    {fit._pooled_n}\n"
-                f"FMI:         {getattr(fit, '_fmi', float('nan')):.4f}\n"
-                f"RE:          {getattr(fit, '_re', float('nan')):.4f}\n"
-            )
+        ci = _extract_focal_coef(fit)
+        if ci:
+            coef_str  = f"{ci['coef']:.6f}"
+            se_str    = f"{ci['se']:.6f}"
+            pval_str  = f"{ci['pval']:.6f}"
+            nobs_str  = str(ci['nobs'])
+            sign_str  = f"+1" if ci['coef'] > 0 else "-1"
+            sig_str   = str(ci['pval'] < Config.ALPHA)
         else:
-            content = fit.summary().as_text()
+            coef_str = se_str = pval_str = nobs_str = sign_str = sig_str = "N/A"
+
+        header = (
+            f"Paper: 0017\n"
+            f"KeyVar: {key_var}\n"
+            f"Mechanism: {mechanism}\n"
+            f"Proportion: {pct_str}\n"
+            f"Method: {method}\n"
+            f"Iteration: {iteration}\n"
+            f"---\n"
+            f"FocalIV: {Config.FOCAL_IV}\n"
+            f"Coef: {coef_str}\n"
+            f"SE: {se_str}\n"
+            f"pval: {pval_str}\n"
+            f"Nobs: {nobs_str}\n"
+            f"Sign: {sign_str}\n"
+            f"Significant: {sig_str}\n"
+            f"---\n"
+        )
+
+        # Append full model summary
+        try:
+            if getattr(fit, "_is_pooled_mi", False):
+                summary = (
+                    f"MI Pooled Result\n"
+                    f"Pooled Coef: {fit._pooled_coef:.6f}\n"
+                    f"Pooled SE:   {fit._pooled_se:.6f}\n"
+                    f"Pooled pval: {fit._pooled_pval:.6f}\n"
+                    f"N (mean):    {fit._pooled_n}\n"
+                    f"FMI:         {getattr(fit, '_fmi', float('nan')):.4f}\n"
+                    f"RE:          {getattr(fit, '_re', float('nan')):.4f}\n"
+                )
+            else:
+                summary = fit.summary().as_text()
+        except Exception:
+            summary = "Summary not available"
+
+        content = header + summary
     except Exception:
         content = "[Output capture failed]"
+
     with open(path, "w", encoding="utf-8", errors="replace") as fh:
         fh.write(content)
 
@@ -1413,7 +1449,7 @@ def run_simulation(df: pd.DataFrame, baseline_fit, mode: str) -> None:
                             else:
                                 raise ValueError(f"Unknown method: {method}")
 
-                            _save_iter_txt(fit, txt_path)
+                            _save_iter_txt(fit, txt_path, key_var, mechanism, pct_str, method, iteration)
                             coef_info = _extract_focal_coef(fit)
                             _update_stability(stability, key_var, mechanism, pct_str, method, coef_info, baseline_coef)
 

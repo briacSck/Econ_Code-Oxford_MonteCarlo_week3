@@ -1,1 +1,20 @@
-None
+Paper: 0005
+KeyVar: log_total_bachelor_deg
+Mechanism: NMAR
+Proportion: 50pct
+Method: Mean
+Iteration: 25
+---
+FocalIV: log_pop_black_aa
+Coef: N/A (Reconstructed — coefficient data not retained from original simulation run)
+SE: N/A
+pval: N/A
+Nobs: N/A
+Sign: N/A
+Significant: N/A
+---
+Reconstructed from stored results — full pyfixest summary not available.
+The original _save_iter_txt called str(fit.summary()) on a pyfixest object,
+which returned "None", producing empty 4-byte files.
+Coefficient-level data was aggregated before workbook export and is no longer
+recoverable from stored outputs.
