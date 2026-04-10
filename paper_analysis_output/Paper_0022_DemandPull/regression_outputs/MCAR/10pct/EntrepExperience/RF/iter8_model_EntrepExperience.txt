@@ -1,0 +1,20 @@
+Paper: 0005
+KeyVar: EntrepExperience
+Mechanism: MCAR
+Proportion: 10pct
+Method: RF
+Iteration: 8
+---
+FocalIV: Post_x_Treatment
+Coef: 0.375760
+SE: 0.193919
+pval: 0.054376
+Nobs: 334
+Sign: +1
+Significant: False
+---
+                  Estimate  Std. Error   t value  Pr(>|t|)      2.5%     97.5%
+Coefficient                                                                   
+Post_x_Treatment  0.375760    0.193919  1.937712  0.054376 -0.007141  0.758660
+Post              0.035164    0.109467  0.321224  0.748449 -0.180984  0.251311
+EntrepExperience -0.078845    0.392049 -0.201111  0.840861 -0.852960  0.695269

@@ -1,0 +1,20 @@
+Paper: 0005
+KeyVar: WorkExp
+Mechanism: MCAR
+Proportion: 5pct
+Method: Reg
+Iteration: 8
+---
+FocalIV: Post_x_Treatment
+Coef: 0.371624
+SE: 0.191497
+pval: 0.054018
+Nobs: 334
+Sign: +1
+Significant: False
+---
+                  Estimate  Std. Error   t value  Pr(>|t|)      2.5%     97.5%
+Coefficient                                                                   
+Post_x_Treatment  0.371624    0.191497  1.940629  0.054018 -0.006493  0.749741
+Post              0.041486    0.109474  0.378963  0.705205 -0.174673  0.257646
+WorkExp           0.171428    0.128789  1.331077  0.185011 -0.082870  0.425727

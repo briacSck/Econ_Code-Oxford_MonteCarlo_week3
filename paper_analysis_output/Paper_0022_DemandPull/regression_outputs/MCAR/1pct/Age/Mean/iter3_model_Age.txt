@@ -1,0 +1,20 @@
+Paper: 0005
+KeyVar: Age
+Mechanism: MCAR
+Proportion: 1pct
+Method: Mean
+Iteration: 3
+---
+FocalIV: Post_x_Treatment
+Coef: 0.381839
+SE: 0.191513
+pval: 0.047832
+Nobs: 334
+Sign: +1
+Significant: True
+---
+                  Estimate  Std. Error   t value  Pr(>|t|)      2.5%     97.5%
+Coefficient                                                                   
+Post_x_Treatment  0.381839    0.191513  1.993798  0.047832  0.003689  0.759989
+Post              0.029929    0.110217  0.271543  0.786315 -0.187699  0.247556
+Age              -0.044181    0.058022 -0.761457  0.447478 -0.158747  0.070385

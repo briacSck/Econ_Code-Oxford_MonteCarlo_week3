@@ -80,6 +80,23 @@ PAPERS = {
         "n_iters":      30,
         "txt_has_data": True,   # .txt files have full OLS summaries
     },
+    "0022": {
+        "paper_dir":          PAPER_OUTPUT / "Paper_0022_DemandPull",
+        "workbook":           PAPER_OUTPUT / "Paper_0022_DemandPull" / "full_run" / "DemandPullReport_0022.xlsx",
+        "paper_info":         REPO_ROOT / "paper_info_0022.xlsx",
+        "author_year":        "DemandPull",
+        "focal_iv":           "Post_x_Treatment",
+        "baseline_coef":      0.3739,
+        "baseline_se":        0.1913,
+        "baseline_pval":      0.052,
+        "regression_outputs": PAPER_OUTPUT / "Paper_0022_DemandPull" / "regression_outputs",
+        "key_vars":           ["Age", "WorkExp", "EntrepExperience"],
+        "mechanisms":   ["MCAR", "MAR", "NMAR"],
+        "pct_strings":  ["1pct", "5pct", "10pct", "20pct", "30pct", "40pct", "50pct"],
+        "methods":      ["LD", "Mean", "Reg", "Iter", "RF", "DL", "MILGBM"],
+        "n_iters":      30,
+        "txt_has_data": True,
+    },
 }
 
 # ---------------------------------------------------------------------------

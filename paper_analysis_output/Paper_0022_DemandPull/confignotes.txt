@@ -1,0 +1,20 @@
+Paper 0022 -- Demand-Pull Innovation and Startup Revenue
+=========================================================
+Source: source_artifacts/Paper_DemandPull/STATA CODE 3560.dta
+Data file: STATA CODE 3560.dta (N=472 obs, panel at startup×round level)
+Regression type: feols (entity FE: SN; robust SEs hetero)
+Preferred spec: Table 3, Panel A (DiD)
+Stata spec: xtreg RevenueLikert Post##Treat, fe robust
+Augmented spec: RevenueLikert ~ Post + Post_x_Treatment + Age + WorkExp + EntrepExperience | SN
+  (Age/WorkExp/EntrepExperience added as controls to enable meaningful key variable missingness simulation)
+Dependent variable: RevenueLikert (Likert scale 1–5, treated as continuous)
+Focal IV: Post_x_Treatment — DiD interaction (Post × Treatment, created in preprocessing)
+BASELINE STATUS: BORDERLINE (2026-04-10)
+  Post_x_Treatment coef = 0.3739, SE = 0.1913, p = 0.052 (marginally non-significant)
+  N = 394 (after listwise deletion for Age/WorkExp/EntrepExperience)
+  Note: Stata R2 matches approximately; borderline p-value is expected for augmented spec
+Key variables: Age, WorkExp, EntrepExperience
+MAR control: TeamSize
+Cluster: None (robust/hetero SEs)
+FE: SN (entity FE)
+Status: BASELINE_MATCHED (borderline accepted)

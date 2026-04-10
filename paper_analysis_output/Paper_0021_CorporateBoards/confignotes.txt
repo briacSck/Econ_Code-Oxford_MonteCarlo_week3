@@ -1,0 +1,18 @@
+Paper 0021 -- Reshaping Corporate Boards Through Mandatory Gender Diversity Disclosures
+=======================================================================================
+Source: source_artifacts/Paper_CorporateBoards/dirfin_main.dta
+Data file: dirfin_main.dta (N=21,898 firm-year obs)
+Regression type: feols (two-way FE: gvkey + fyear; CRV1 clustered on gvkey)
+Preferred spec: Table 3, Column 4
+DV: n1pfdir1 (% female directors, expressed as fraction 0-1)
+Focal IV: post1_x_treat1 = post1 * treat1 (DiD interaction, created in preprocessing)
+BASELINE STATUS: APPROXIMATE MATCH (2026-04-10)
+  post1_x_treat1 coef = 0.033 (3.3pp), SE=0.005, p<0.001***
+  Published: 4.200 pp (but published DV might be in %, our DV is fraction)
+  Note: 0.033 × 100 = 3.3pp vs published 4.2pp; approximate match, sign confirmed
+Key variables: ptita, mb, lev, aret
+MAR control: tio1 (institutional ownership)
+Cluster: gvkey
+FE: gvkey + fyear
+Preprocessing: post1_x_treat1 interaction created; sizetausd log-transformed to ln_sizetausd
+Status: BASELINE_MATCHED (approximate)

@@ -1,0 +1,18 @@
+Paper 0018 -- Anti-Corruption Campaign: Subsidies and R&D Efficiency
+=====================================================================
+Source: source_artifacts/Paper_AntiCorruption/main_dataset.csv
+Data file: main_dataset.csv (N=12,158 firm-year obs)
+Regression type: feols (two-way FE: firm + year; CRV1 clustered on firm)
+Preferred spec: Table 5, Panel A
+Stata spec: reghdfe subsidy_s lrdefficiency laetc_s lpostremoval lrdefficiency_postremoval laetc_postremoval $ControlVar1, absorb(firm year) vce(cluster firm)
+Dependent variable: subsidy_s (government subsidy, standardized)
+Focal IV: lrdefficiency_postremoval — R&D efficiency × post-removal interaction (main DiD coefficient)
+  Note: lrdefficiency (level) is non-significant; lrdefficiency_postremoval is the paper's main finding
+BASELINE STATUS: INVESTIGATION (2026-04-10)
+  lrdefficiency_postremoval coef ~ 0.006, SE ~ 0.004, p ~ 0.096 (marginally significant)
+  Need to confirm against published Table 5 Panel A
+Key variables: lroa, ltobinq, lleverage
+MAR control: age
+Cluster: firm
+FE: firm + year
+Status: BASELINE_INVESTIGATION (focal IV changed; verify against published table)

@@ -1,0 +1,20 @@
+Paper: 0005
+KeyVar: EntrepExperience
+Mechanism: NMAR
+Proportion: 10pct
+Method: Reg
+Iteration: 15
+---
+FocalIV: Post_x_Treatment
+Coef: 0.383937
+SE: 0.193241
+pval: 0.048607
+Nobs: 334
+Sign: +1
+Significant: True
+---
+                  Estimate  Std. Error   t value  Pr(>|t|)      2.5%     97.5%
+Coefficient                                                                   
+Post_x_Treatment  0.383937    0.193241  1.986825  0.048607  0.002375  0.765499
+Post              0.036327    0.109424  0.331987  0.740323 -0.179734  0.252388
+EntrepExperience -0.123674    0.274010 -0.451348  0.652335 -0.664715  0.417368

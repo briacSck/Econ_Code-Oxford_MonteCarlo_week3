@@ -1,0 +1,20 @@
+Paper: 0005
+KeyVar: Age
+Mechanism: NMAR
+Proportion: 30pct
+Method: RF
+Iteration: 10
+---
+FocalIV: Post_x_Treatment
+Coef: 0.370369
+SE: 0.190959
+pval: 0.054155
+Nobs: 334
+Sign: +1
+Significant: False
+---
+                  Estimate  Std. Error   t value  Pr(>|t|)      2.5%     97.5%
+Coefficient                                                                   
+Post_x_Treatment  0.370369    0.190959  1.939516  0.054155 -0.006687  0.747424
+Post              0.037620    0.109094  0.344843  0.730655 -0.177789  0.253029
+Age               0.003814    0.024288  0.157030  0.875415 -0.044143  0.051771

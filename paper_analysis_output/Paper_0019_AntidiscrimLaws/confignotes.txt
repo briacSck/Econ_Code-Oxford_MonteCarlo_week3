@@ -1,0 +1,18 @@
+Paper 0019 -- Anti-Discrimination Laws and Firm Performance
+===========================================================
+Source: source_artifacts/Paper_AntidiscriminationLawsPerformance/ad_dataset_ms1.dta
+Data file: ad_dataset_ms1.dta (N=13,646 rows; after filter N=13,247)
+Regression type: feols (two-way FE: cm_id + fyear)
+Preferred spec: Table 4, Operating Profitability
+Stata spec: reghdfe oibdp_atw ad_law2 $cont2 i.state_id#c.fyear if census_region_south!=. & randsamp1!=., a(cm_id fyear) vce(cluster cm_id)
+Dependent variable: oibdp_atw (operating income / assets, winsorized)
+Focal IV: ad_law2 — Anti-discrimination law indicator
+BASELINE STATUS: MATCHED (2026-04-10)
+  ad_law2 coef = -0.0110, SE = 0.0034, p = 0.0013 **
+  N = 13,247 (sample filter applied: census_region_south notna & randsamp1 notna)
+  Note: state×year linear trend included via i(state_id, fyear) pyfixest formula term
+Key variables: ln_at_adj, ppent_at, state_inc_growth
+MAR control: lev_lt_at
+Cluster: cm_id
+FE: cm_id + fyear
+Status: BASELINE_MATCHED

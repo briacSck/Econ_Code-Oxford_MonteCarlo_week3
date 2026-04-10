@@ -1,0 +1,22 @@
+Paper: 0005
+KeyVar: Age
+Mechanism: MAR
+Proportion: 1pct
+Method: Reg
+Iteration: 10
+---
+FocalIV: Post_x_Treatment
+Coef: 0.394071
+SE: 0.190663
+pval: 0.040321
+Nobs: 334
+Sign: +1
+Significant: True
+---
+                  Estimate  Std. Error  ...      2.5%     97.5%
+Coefficient                             ...                    
+Post_x_Treatment  0.394071    0.190663  ...  0.017600  0.770542
+Post              0.043060    0.109656  ... -0.173460  0.259581
+Age               0.141770    0.015806  ...  0.110561  0.172979
+
+[3 rows x 6 columns]

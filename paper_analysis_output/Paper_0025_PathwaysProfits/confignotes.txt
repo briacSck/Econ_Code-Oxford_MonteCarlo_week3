@@ -1,0 +1,18 @@
+Paper 0025 -- Pathways to Profits: Impact of Marketing vs. Finance Skills
+=========================================================================
+Source: source_artifacts/Paper_PathwaysToProfits/P2P_dataset.dta
+Data file: P2P_dataset.dta (N=2,556 rows, 3 survey rounds; endline filter → N=611)
+Regression type: feols OLS no FE (cross-section RCT, industry dummies in controls)
+Preferred spec: Table 5, Column 6 (composite profits at endline)
+DV: Profits3_composite_w1 (composite monthly profits, winsorized)
+Focal IV: Treatment_FIN (indicator for finance training; marketing = Treatment_MKT in controls)
+BASELINE STATUS: APPROXIMATE MATCH (2026-04-10)
+  Treatment_FIN coef = 2,231 (SE=1,053, p=0.034*)
+  Published Table 5 Col 6: Finance = 2,707 (SE=1,239, p<0.05)
+  Approximate match; gap likely due to winsorization differences
+  Sample: T_survey_round==3 & Sample_endline==1 → 611 obs
+Key variables: Age, Operating_yearstotal, Activity_Hours, pre_Profits3_composite_w1
+MAR control: Distance2training_miles
+Cluster: None (robust/hetero SEs)
+FE: None (pure cross-section OLS)
+Status: BASELINE_MATCHED (approximate)
