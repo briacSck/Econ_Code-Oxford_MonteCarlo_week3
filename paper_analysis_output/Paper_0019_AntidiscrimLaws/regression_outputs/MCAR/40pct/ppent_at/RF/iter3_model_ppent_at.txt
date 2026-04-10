@@ -1,0 +1,62 @@
+Paper: 0005
+KeyVar: ppent_at
+Mechanism: MCAR
+Proportion: 40pct
+Method: RF
+Iteration: 3
+---
+FocalIV: ad_law2
+Coef: -0.011910
+SE: 0.003284
+pval: 0.000296
+Nobs: 13263
+Sign: -1
+Significant: True
+---
+                      Estimate  Std. Error  ...        2.5%       97.5%
+Coefficient                                 ...                        
+ad_law2              -0.011910    0.003284  ...   -0.018352   -0.005468
+ln_at_adj             0.004078    0.003989  ...   -0.003747    0.011903
+ppent_at             -0.007831    0.004214  ...   -0.016097    0.000434
+div_payer             0.027013    0.004333  ...    0.018515    0.035512
+state_inc_growth      0.002063    0.000393  ...    0.001291    0.002835
+state_id::1.0:fyear   0.040254  166.350212  ... -326.245462  326.325971
+state_id::3.0:fyear   0.044065         NaN  ...         NaN         NaN
+state_id::4.0:fyear   0.040246         NaN  ...         NaN         NaN
+state_id::5.0:fyear   0.041859         NaN  ...         NaN         NaN
+state_id::6.0:fyear   0.040007         NaN  ...         NaN         NaN
+state_id::7.0:fyear   0.040307         NaN  ...         NaN         NaN
+state_id::10.0:fyear  0.042210         NaN  ...         NaN         NaN
+state_id::11.0:fyear  0.039909         NaN  ...         NaN         NaN
+state_id::12.0:fyear  0.061033         NaN  ...         NaN         NaN
+state_id::14.0:fyear  0.040225         NaN  ...         NaN         NaN
+state_id::15.0:fyear  0.041022         NaN  ...         NaN         NaN
+state_id::17.0:fyear  0.046766         NaN  ...         NaN         NaN
+state_id::18.0:fyear  0.039843         NaN  ...         NaN         NaN
+state_id::19.0:fyear  0.033177         NaN  ...         NaN         NaN
+state_id::21.0:fyear  0.044587         NaN  ...         NaN         NaN
+state_id::22.0:fyear  0.040210   94.211979  ... -184.750797  184.831217
+state_id::23.0:fyear  0.041155         NaN  ...         NaN         NaN
+state_id::24.0:fyear  0.042839         NaN  ...         NaN         NaN
+state_id::25.0:fyear  0.031328         NaN  ...         NaN         NaN
+state_id::26.0:fyear  0.043648         NaN  ...         NaN         NaN
+state_id::28.0:fyear  0.090117         NaN  ...         NaN         NaN
+state_id::29.0:fyear  0.023628         NaN  ...         NaN         NaN
+state_id::30.0:fyear  0.044109         NaN  ...         NaN         NaN
+state_id::31.0:fyear  0.040260         NaN  ...         NaN         NaN
+state_id::32.0:fyear -0.070392         NaN  ...         NaN         NaN
+state_id::33.0:fyear  0.040290         NaN  ...         NaN         NaN
+state_id::34.0:fyear  0.040064         NaN  ...         NaN         NaN
+state_id::36.0:fyear  0.040195         NaN  ...         NaN         NaN
+state_id::38.0:fyear  0.038260         NaN  ...         NaN         NaN
+state_id::39.0:fyear  0.040242         NaN  ...         NaN         NaN
+state_id::40.0:fyear  0.049237         NaN  ...         NaN         NaN
+state_id::41.0:fyear  0.040043         NaN  ...         NaN         NaN
+state_id::43.0:fyear  0.040307         NaN  ...         NaN         NaN
+state_id::44.0:fyear  0.037877         NaN  ...         NaN         NaN
+state_id::45.0:fyear  0.046742         NaN  ...         NaN         NaN
+state_id::47.0:fyear  0.039520         NaN  ...         NaN         NaN
+state_id::48.0:fyear  0.038263         NaN  ...         NaN         NaN
+state_id::50.0:fyear  0.039119         NaN  ...         NaN         NaN
+
+[43 rows x 6 columns]

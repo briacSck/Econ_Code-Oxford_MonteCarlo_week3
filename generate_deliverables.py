@@ -80,6 +80,23 @@ PAPERS = {
         "n_iters":      30,
         "txt_has_data": True,   # .txt files have full OLS summaries
     },
+    "0019": {
+        "paper_dir":          PAPER_OUTPUT / "Paper_0019_AntidiscrimLaws",
+        "workbook":           PAPER_OUTPUT / "Paper_0019_AntidiscrimLaws" / "full_run" / "AntidiscrimLawsReport_0019.xlsx",
+        "paper_info":         REPO_ROOT / "paper_info_0019.xlsx",
+        "author_year":        "AntidiscrimLaws",
+        "focal_iv":           "ad_law2",
+        "baseline_coef":      -0.0110,
+        "baseline_se":        0.0034,
+        "baseline_pval":      0.0013,
+        "regression_outputs": PAPER_OUTPUT / "Paper_0019_AntidiscrimLaws" / "regression_outputs",
+        "key_vars":           ["ln_at_adj", "ppent_at", "state_inc_growth"],
+        "mechanisms":   ["MCAR", "MAR", "NMAR"],
+        "pct_strings":  ["1pct", "5pct", "10pct", "20pct", "30pct", "40pct", "50pct"],
+        "methods":      ["LD", "Mean", "Reg", "Iter", "RF", "DL", "MILGBM"],
+        "n_iters":      30,
+        "txt_has_data": True,
+    },
     "0022": {
         "paper_dir":          PAPER_OUTPUT / "Paper_0022_DemandPull",
         "workbook":           PAPER_OUTPUT / "Paper_0022_DemandPull" / "full_run" / "DemandPullReport_0022.xlsx",
