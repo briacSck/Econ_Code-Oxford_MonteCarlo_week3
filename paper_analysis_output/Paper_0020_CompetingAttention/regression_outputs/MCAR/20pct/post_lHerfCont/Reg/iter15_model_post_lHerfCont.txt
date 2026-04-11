@@ -1,0 +1,24 @@
+Paper: 0020
+KeyVar: post_lHerfCont
+Mechanism: MCAR
+Proportion: 20pct
+Method: Reg
+Iteration: 15
+---
+FocalIV: afterXVGM
+Coef: 0.999570
+SE: 0.465144
+pval: 0.033371
+Nobs: 4560
+Sign: +1
+Significant: True
+---
+                     Estimate  Std. Error  ...      2.5%     97.5%
+Coefficient                                ...                    
+afterXVGM            0.999570    0.465144  ...  0.079898  1.919242
+post_lav_Visits     -0.005192    0.028160  ... -0.060869  0.050485
+post_lav_Visits_VGM -0.054501    0.032956  ... -0.119661  0.010658
+post_lHerfCont       0.013866    0.285754  ... -0.551121  0.578852
+post_lHerfCont_VGM  -0.577601    0.315997  ... -1.202383  0.047180
+
+[5 rows x 6 columns]

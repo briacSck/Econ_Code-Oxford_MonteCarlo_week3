@@ -1,0 +1,24 @@
+Paper: 0020
+KeyVar: post_lav_Visits
+Mechanism: MAR
+Proportion: 20pct
+Method: Iter
+Iteration: 20
+---
+FocalIV: afterXVGM
+Coef: 1.221783
+SE: 0.299460
+pval: 0.000076
+Nobs: 4570
+Sign: +1
+Significant: True
+---
+                     Estimate  Std. Error  ...      2.5%     97.5%
+Coefficient                                ...                    
+afterXVGM            1.221783    0.299460  ...  0.629698  1.813869
+post_lav_Visits     -0.000256    0.005805  ... -0.011734  0.011222
+post_lav_Visits_VGM -0.059584    0.017973  ... -0.095120 -0.024047
+post_lHerfCont       0.368876    0.332560  ... -0.288655  1.026406
+post_lHerfCont_VGM  -0.932206    0.372697  ... -1.669094 -0.195318
+
+[5 rows x 6 columns]
