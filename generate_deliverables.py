@@ -56,7 +56,7 @@ PAPERS = {
         "pct_strings":  ["1pct", "5pct", "10pct", "20pct", "30pct", "40pct", "50pct"],
         "methods":      ["LD", "Mean", "Reg", "Iter", "RF", "DL", "MILGBM"],
         "n_iters":      30,
-        "txt_has_data": False,  # .txt files are empty for this paper
+        "txt_has_data": True,   # re-run (2026-04) produced real pyfixest tidy() outputs
     },
     "0017": {
         "paper_dir":          PAPER_OUTPUT / "Paper_0017_StatusConsensus",
@@ -214,6 +214,19 @@ def _parse_ols_txt(path: Path, focal_iv: str) -> dict | None:
             pval = float(re.search(r'Pooled pval:\s*([-\d.e+]+)', text).group(1))
             m_n  = re.search(r'N \(mean\):\s*([\d.]+)', text)
             nobs = int(float(m_n.group(1))) if m_n else None
+            return {"coef": coef, "se": se, "pval": pval, "nobs": nobs}
+        except (AttributeError, ValueError):
+            pass
+
+    # --- Try custom pyfixest header format (Paper 0005 re-run) ---
+    # Format: lines like "Coef: 0.029300\nSE: 0.004601\npval: 0.000000\nNobs: 32647"
+    if re.search(r'^Coef:\s', text, re.MULTILINE):
+        try:
+            coef = float(re.search(r'^Coef:\s*([-\d.e+]+)', text, re.MULTILINE).group(1))
+            se   = float(re.search(r'^SE:\s*([-\d.e+]+)', text, re.MULTILINE).group(1))
+            pval = float(re.search(r'^pval:\s*([-\d.e+]+)', text, re.MULTILINE).group(1))
+            m_n  = re.search(r'^Nobs:\s*([\d]+)', text, re.MULTILINE)
+            nobs = int(m_n.group(1)) if m_n else None
             return {"coef": coef, "se": se, "pval": pval, "nobs": nobs}
         except (AttributeError, ValueError):
             pass

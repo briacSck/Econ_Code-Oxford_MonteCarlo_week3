@@ -6,15 +6,19 @@ Method: Reg
 Iteration: 12
 ---
 FocalIV: log_pop_black_aa
-Coef: N/A (Reconstructed — coefficient data not retained from original simulation run)
-SE: N/A
-pval: N/A
-Nobs: N/A
-Sign: N/A
-Significant: N/A
+Coef: 0.047556
+SE: 0.009143
+pval: 0.000000
+Nobs: 32647
+Sign: +1
+Significant: True
 ---
-Reconstructed from stored results — full pyfixest summary not available.
-The original _save_iter_txt called str(fit.summary()) on a pyfixest object,
-which returned "None", producing empty 4-byte files.
-Coefficient-level data was aggregated before workbook export and is no longer
-recoverable from stored outputs.
+                        Estimate  Std. Error  ...      2.5%     97.5%
+Coefficient                                   ...                    
+log_pop_black_aa        0.047556    0.009143  ...  0.029577  0.065534
+log_pop_total          -0.052421    0.027949  ... -0.107382  0.002540
+log_total_bachelor_deg  0.164101    0.049526  ...  0.066709  0.261493
+log_pop_total_poverty   0.003866    0.006005  ... -0.007942  0.015674
+log_total_social_cap    0.239810    0.012693  ...  0.214849  0.264771
+
+[5 rows x 6 columns]

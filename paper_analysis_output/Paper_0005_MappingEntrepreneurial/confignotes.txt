@@ -154,3 +154,25 @@ MILGBM method: LightGBM 4.6.0, MICE framework, M=5 imputed datasets, Rubin's
 Earlier run archived:
   ARCHIVE_Stroube2025Report_0005_partial_20260329.xlsx  -- smoke-log contamination
     (N_iters=28 for 42 combos; progress log not namespaced before H1 patch)
+
+--------------------------------------------------------------------------------
+RE-RUN COMPLETION NOTE (2026-04-12)
+--------------------------------------------------------------------------------
+Reason for re-run: earlier txt outputs were inadvertently overwritten with N/A
+  stub files by backfill_txt_0005.py. Re-run launched 2026-04-10 with real
+  pyfixest tidy() outputs namespaced to simulation_0005_progress_full.log.
+
+Re-run result: Stroube2025Report_0005.xlsx (17,640 runs, 0 errors)
+  Log confirms: 17,640 lines, last entry NMAR|50pct|log_total_social_cap|MILGBM|29
+
+AuthorYearReport generated (2026-04-12):
+  - 19 sheets including 00_PaperInfo and IterationDetail
+  - IterationDetail: 17,640 rows, 0 NaN coefs (all real pyfixest values)
+  - generate_deliverables.py txt_has_data updated to True (custom Coef:/SE:/pval: format)
+  - Figures regenerated: fig1/fig2/fig3 in full_run/figures/
+
+Final QC checks (2026-04-12):
+  [X] MCAR 1pct both_match = 100% (sanity check passed)
+  [X] 0 NaN coefs in IterationDetail (all 17,640 parsed from real txt outputs)
+  [X] AuthorYearReport_0005.xlsx = 3.7 MB (well above 2 MB threshold)
+  [X] All 19 sheets present including IterationDetail and 00_PaperInfo

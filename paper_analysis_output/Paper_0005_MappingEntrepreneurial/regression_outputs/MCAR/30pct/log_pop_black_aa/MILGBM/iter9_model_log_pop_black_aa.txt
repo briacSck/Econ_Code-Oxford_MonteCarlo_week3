@@ -6,15 +6,17 @@ Method: MILGBM
 Iteration: 9
 ---
 FocalIV: log_pop_black_aa
-Coef: N/A (Reconstructed — coefficient data not retained from original simulation run)
-SE: N/A
-pval: N/A
-Nobs: N/A
-Sign: N/A
-Significant: N/A
+Coef: 0.024449
+SE: 0.003352
+pval: 0.001878
+Nobs: 32647
+Sign: +1
+Significant: True
 ---
-Reconstructed from stored results — full pyfixest summary not available.
-The original _save_iter_txt called str(fit.summary()) on a pyfixest object,
-which returned "None", producing empty 4-byte files.
-Coefficient-level data was aggregated before workbook export and is no longer
-recoverable from stored outputs.
+MI Pooled Result
+Pooled Coef: 0.024449
+Pooled SE:   0.003352
+Pooled pval: 0.001878
+N (mean):    32647
+FMI:         0.0412
+RE:          0.9918
