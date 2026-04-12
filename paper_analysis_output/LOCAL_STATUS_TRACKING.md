@@ -11,7 +11,7 @@ Updated: 2026-04-12
 | 0020 | CompetingAttention | DELIVERABLE_DONE | 1.137* | 13,230/13,230. 0 errors. Committed + pushed. |
 | 0021 | CorporateBoards | FULL_IN_PROGRESS | 0.033*** | Smoke passed. Full run just launched (N=21,898). |
 | 0022 | DemandPull | DELIVERABLE_DONE | 0.374~ | 13,230/13,230. 0 errors. Committed + pushed. |
-| 0023 | EffectIPO | FULL_IN_PROGRESS | -0.041*** | ~12,484/17,640 (71%). 0 errors. |
+| 0023 | EffectIPO | DELIVERABLE_DONE | -0.041*** | 17,640/17,640. 0 errors. AuthorYearReport_0023.xlsx (1.7 MB, 19 sheets). Summary sheets rebuilt from txt (resumed run). Committed + pushed. |
 | 0024 | HedingHill | SMOKE_DONE | -0.031*** | Smoke passed. Awaiting full run slot. |
 | 0025 | PathwaysProfits | SMOKE_DONE | 2,231* | Smoke passed. Awaiting full run slot. |
 

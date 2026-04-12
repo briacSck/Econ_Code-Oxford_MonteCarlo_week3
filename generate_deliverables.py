@@ -131,6 +131,27 @@ PAPERS = {
         "n_iters":      30,
         "txt_has_data": True,
     },
+    "0023": {
+        "paper_dir":          PAPER_OUTPUT / "Paper_0023_EffectIPO",
+        "workbook":           PAPER_OUTPUT / "Paper_0023_EffectIPO" / "full_run" / "EffectIPOReport_0023.xlsx",
+        "paper_info":         REPO_ROOT / "paper_info_0023.xlsx",
+        "author_year":        "EffectIPO",
+        "focal_iv":           "diff_laggaap_etr",
+        "baseline_coef":      -0.0409,
+        "baseline_se":        0.00876,
+        "baseline_pval":      3.03e-06,
+        "regression_outputs": PAPER_OUTPUT / "Paper_0023_EffectIPO" / "regression_outputs",
+        "key_vars":           ["ch1_s_rd", "ch1_s_sga", "ch1_roa_pretax", "ch1_size"],
+        "mechanisms":   ["MCAR", "MAR", "NMAR"],
+        "pct_strings":  ["1pct", "5pct", "10pct", "20pct", "30pct", "40pct", "50pct"],
+        "methods":      ["LD", "Mean", "Reg", "Iter", "RF", "DL", "MILGBM"],
+        "n_iters":      30,
+        "txt_has_data": True,
+        # Source workbook Coef_Stability_Summary and Mean_Stability sheets are incomplete
+        # because the run was interrupted and resumed — in-memory results only cover the
+        # restart session. Rebuild those sheets from the parsed IterationDetail data.
+        "rebuild_summary": True,
+    },
 }
 
 # ---------------------------------------------------------------------------
@@ -407,6 +428,145 @@ def _write_iteration_detail_sheet(wb: openpyxl.Workbook, df: pd.DataFrame) -> No
 
 
 # ---------------------------------------------------------------------------
+# Fix C — rebuild summary sheets from IterationDetail (for resumed runs)
+# ---------------------------------------------------------------------------
+
+def _recompute_coef_stability_summary(df_iter: pd.DataFrame) -> pd.DataFrame:
+    """Recompute Coef_Stability_Summary from IterationDetail df."""
+    records = []
+    for (kv, mech, pct, method), g in df_iter.groupby(
+        ["key_var", "mechanism", "pct_str", "method"], sort=False
+    ):
+        valid = g.dropna(subset=["both_match"])
+        n = len(valid)
+        both_same = int(valid["both_match"].sum()) if n > 0 else 0
+        ss_n = int(((valid["sign_match"] == 1) & (valid["sig_match"] == 0)).sum()) if n > 0 else 0
+
+        if n > 0:
+            b_prop = round(both_same / n * 100, 1)
+            ss_prop = round(ss_n / n * 100, 1)
+            # Wilson CI for B_prop
+            p = both_same / n
+            z = 1.96
+            denom = 1 + z ** 2 / n
+            center = (p + z ** 2 / (2 * n)) / denom
+            margin = z * np.sqrt(p * (1 - p) / n + z ** 2 / (4 * n ** 2)) / denom
+            b_ci_lo = round(max(0.0, center - margin) * 100, 1)
+            b_ci_hi = round(min(100.0, center + margin) * 100, 1)
+            mean_nobs = int(valid["nobs"].mean()) if valid["nobs"].notna().any() else None
+        else:
+            b_prop = ss_prop = b_ci_lo = b_ci_hi = mean_nobs = None
+
+        records.append({
+            "KeyVar": kv, "Mechanism": mech, "Proportion": pct, "Method": method,
+            "N_iters": n, "BothSame": both_same, "SignSameSigChanged": ss_n,
+            "B_prop": b_prop, "SS_prop": ss_prop,
+            "B_CI_lo": b_ci_lo, "B_CI_hi": b_ci_hi,
+            "Mean_N_obs": mean_nobs,
+        })
+
+    PCT_ORDER = ["1pct", "5pct", "10pct", "20pct", "30pct", "40pct", "50pct"]
+    MECH_ORDER = ["MCAR", "MAR", "NMAR"]
+    df = pd.DataFrame(records)
+    df["_mech_ord"] = df["Mechanism"].map({m: i for i, m in enumerate(MECH_ORDER)})
+    df["_pct_ord"] = df["Proportion"].map({p: i for i, p in enumerate(PCT_ORDER)})
+    df = df.sort_values(["_mech_ord", "_pct_ord", "KeyVar", "Method"]).drop(
+        columns=["_mech_ord", "_pct_ord"]
+    ).reset_index(drop=True)
+    return df
+
+
+def _recompute_mean_stability(df_css: pd.DataFrame, mechanism: str) -> pd.DataFrame:
+    """Recompute Mean_Stability_<MECH> from Coef_Stability_Summary df."""
+    PCT_ORDER = ["1pct", "5pct", "10pct", "20pct", "30pct", "40pct", "50pct"]
+    sub = df_css[df_css["Mechanism"] == mechanism].copy()
+
+    rows = []
+    for (kv, method), g in sub.groupby(["KeyVar", "Method"], sort=False):
+        row = {"KeyVar": kv, "Method": method}
+        for pct in PCT_ORDER:
+            r = g[g["Proportion"] == pct]
+            if len(r) == 1:
+                row[f"B_{pct}"]    = r.iloc[0]["B_prop"]
+                row[f"B_lo_{pct}"] = r.iloc[0]["B_CI_lo"]
+                row[f"B_hi_{pct}"] = r.iloc[0]["B_CI_hi"]
+                row[f"SS_{pct}"]   = r.iloc[0]["SS_prop"]
+            else:
+                row[f"B_{pct}"] = row[f"B_lo_{pct}"] = row[f"B_hi_{pct}"] = row[f"SS_{pct}"] = None
+        rows.append(row)
+
+    col_order = ["KeyVar", "Method"]
+    for pct in PCT_ORDER:
+        col_order += [f"B_{pct}", f"B_lo_{pct}", f"B_hi_{pct}", f"SS_{pct}"]
+    df = pd.DataFrame(rows)
+    df = df.sort_values(["KeyVar", "Method"]).reset_index(drop=True)
+    return df[[c for c in col_order if c in df.columns]]
+
+
+def _recompute_model_comparison(df_iter: pd.DataFrame) -> pd.DataFrame:
+    """Recompute Model_Comparison (RMSE + avg_rel_se per method/mechanism/pct)."""
+    records = []
+    for (method, mech, pct), g in df_iter.groupby(["method", "mechanism", "pct_str"], sort=False):
+        valid = g.dropna(subset=["coef", "se"])
+        if len(valid) == 0:
+            continue
+        rmse = float(np.sqrt(((valid["coef_delta"]) ** 2).mean()))
+        baseline_se = valid["baseline_se"].iloc[0]
+        avg_rel_se = float((valid["se"] / baseline_se).mean()) if baseline_se else None
+        records.append({
+            "method": method, "mechanism": mech, "pct_str": pct,
+            "rmse": rmse, "avg_rel_se": avg_rel_se, "n_iters": len(valid),
+        })
+    PCT_ORDER = ["1pct", "5pct", "10pct", "20pct", "30pct", "40pct", "50pct"]
+    MECH_ORDER = ["MCAR", "MAR", "NMAR"]
+    df = pd.DataFrame(records)
+    df["_mord"] = df["mechanism"].map({m: i for i, m in enumerate(MECH_ORDER)})
+    df["_pord"] = df["pct_str"].map({p: i for i, p in enumerate(PCT_ORDER)})
+    return df.sort_values(["method", "_mord", "_pord"]).drop(columns=["_mord", "_pord"]).reset_index(drop=True)
+
+
+def _overwrite_sheet(wb: openpyxl.Workbook, sheet_name: str, df: pd.DataFrame) -> None:
+    """Replace an existing sheet in wb with the contents of df."""
+    if sheet_name in wb.sheetnames:
+        idx = wb.sheetnames.index(sheet_name)
+        del wb[sheet_name]
+        ws = wb.create_sheet(sheet_name, idx)
+    else:
+        ws = wb.create_sheet(sheet_name)
+
+    cols = list(df.columns)
+    ws.append(cols)
+    _style_header_row(ws)
+    ws.freeze_panes = "A2"
+    for i, row in enumerate(df.itertuples(index=False), start=2):
+        ws.append(list(row))
+        if i % 2 == 0:
+            for cell in ws[i]:
+                cell.fill = ALT_ROW_FILL
+    for col_idx, col_name in enumerate(cols, start=1):
+        ws.column_dimensions[get_column_letter(col_idx)].width = 14
+    print(f"    Rebuilt {sheet_name}: {len(df):,} rows")
+
+
+def _rebuild_summary_sheets(wb: openpyxl.Workbook, df_iter: pd.DataFrame) -> None:
+    """
+    Recompute and overwrite Coef_Stability_Summary, Mean_Stability_*, and
+    Model_Comparison sheets from the complete IterationDetail data.
+    Used when the source workbook was built from a partial (resumed) run.
+    """
+    print("  Rebuilding summary sheets from IterationDetail...")
+    df_css = _recompute_coef_stability_summary(df_iter)
+    _overwrite_sheet(wb, "Coef_Stability_Summary", df_css)
+
+    for mech in ["MCAR", "MAR", "NMAR"]:
+        df_ms = _recompute_mean_stability(df_css, mech)
+        _overwrite_sheet(wb, f"Mean_Stability_{mech}", df_ms)
+
+    df_mc = _recompute_model_comparison(df_iter)
+    _overwrite_sheet(wb, "Model_Comparison", df_mc)
+
+
+# ---------------------------------------------------------------------------
 # Main per-paper builder
 # ---------------------------------------------------------------------------
 def process_paper(paper_id: str, cfg: dict) -> Path:
@@ -435,6 +595,10 @@ def process_paper(paper_id: str, cfg: dict) -> Path:
     else:
         df_iter = _build_iteration_detail_0005(cfg)
     _write_iteration_detail_sheet(wb, df_iter)
+
+    # Fix C — rebuild summary sheets if source workbook is from a resumed run
+    if cfg.get("rebuild_summary"):
+        _rebuild_summary_sheets(wb, df_iter)
 
     # Save to full_run/
     out_name = f"AuthorYearReport_{paper_id}.xlsx"
