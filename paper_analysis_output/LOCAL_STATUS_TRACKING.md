@@ -13,7 +13,7 @@ Updated: 2026-04-12
 | 0022 | DemandPull | DELIVERABLE_DONE | 0.374~ | 13,230/13,230. 0 errors. Committed + pushed. |
 | 0023 | EffectIPO | DELIVERABLE_DONE | -0.041*** | 17,640/17,640. 0 errors. AuthorYearReport_0023.xlsx (1.7 MB, 19 sheets). Summary sheets rebuilt from txt (resumed run). Committed + pushed. |
 | 0024 | HedingHill | SMOKE_DONE | -0.031*** | Smoke passed. Awaiting full run slot. |
-| 0025 | PathwaysProfits | SMOKE_DONE | 2,231* | Smoke passed. Awaiting full run slot. |
+| 0025 | PathwaysProfits | DELIVERABLE_DONE | 2,231* | 17,640/17,640. 0 errors. AuthorYearReport_0025.xlsx (1.7 MB, 19 sheets, rebuild_summary). Committed + pushed. |
 
 ## Active processes (2026-04-12)
 - 0021 full run: ~37% (large panel, N=21,898)

@@ -16,3 +16,20 @@ MAR control: Distance2training_miles
 Cluster: None (robust/hetero SEs)
 FE: None (pure cross-section OLS)
 Status: BASELINE_MATCHED (approximate)
+
+================================================================================
+FULL RUN COMPLETION NOTE (2026-04-13)
+================================================================================
+17,640 / 17,640 runs, 0 errors.
+Run interrupted and resumed multiple times — progress log has ~895 duplicate
+entries but 17,640 unique combo keys. Final restart reported "Resuming: 17,640
+already complete" and wrote workbook with empty summary sheets. Fixed via
+rebuild_summary=True in generate_deliverables.py (all 17,640 txt parsed OK).
+
+AuthorYearReport_0025.xlsx: 19 sheets, 17,640 IterationDetail rows, 0 NaN coefs.
+Coef_Stability_Summary: 588/588 rows N_iters=30.
+
+QC NOTE: B_prop=0 at MCAR 1pct for MILGBM across all 4 key vars (not a bug).
+Baseline p=0.0345 is borderline; Rubin's rules SE inflation on N=611 pushes
+p>0.05 in all 30 MILGBM iterations. Substantively meaningful — documents
+fragility of a borderline RCT result under MI. All other methods show B~90-100%.

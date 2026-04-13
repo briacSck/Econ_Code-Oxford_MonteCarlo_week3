@@ -152,6 +152,27 @@ PAPERS = {
         # restart session. Rebuild those sheets from the parsed IterationDetail data.
         "rebuild_summary": True,
     },
+    "0025": {
+        "paper_dir":          PAPER_OUTPUT / "Paper_0025_PathwaysProfits",
+        "workbook":           PAPER_OUTPUT / "Paper_0025_PathwaysProfits" / "full_run" / "PathwaysProfitsReport_0025.xlsx",
+        "paper_info":         REPO_ROOT / "paper_info_0025.xlsx",
+        "author_year":        "PathwaysProfits",
+        "focal_iv":           "Treatment_FIN",
+        "baseline_coef":      2230.74,
+        "baseline_se":        1052.65,
+        "baseline_pval":      0.0345,
+        "regression_outputs": PAPER_OUTPUT / "Paper_0025_PathwaysProfits" / "regression_outputs",
+        "key_vars":           ["Age", "Operating_yearstotal", "Activity_Hours", "pre_Profits3_composite_w1"],
+        "mechanisms":   ["MCAR", "MAR", "NMAR"],
+        "pct_strings":  ["1pct", "5pct", "10pct", "20pct", "30pct", "40pct", "50pct"],
+        "methods":      ["LD", "Mean", "Reg", "Iter", "RF", "DL", "MILGBM"],
+        "n_iters":      30,
+        "txt_has_data": True,
+        # Source workbook has empty summary sheets — final restart skipped all combos
+        # via done_set (all 17,640 unique keys present after parallel-run duplicates).
+        # Rebuild from the complete txt files.
+        "rebuild_summary": True,
+    },
 }
 
 # ---------------------------------------------------------------------------
