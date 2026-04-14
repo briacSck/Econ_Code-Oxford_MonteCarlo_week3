@@ -173,6 +173,26 @@ PAPERS = {
         # Rebuild from the complete txt files.
         "rebuild_summary": True,
     },
+    "0021": {
+        "paper_dir":          PAPER_OUTPUT / "Paper_0021_CorporateBoards",
+        "workbook":           PAPER_OUTPUT / "Paper_0021_CorporateBoards" / "full_run" / "CorporateBoardsReport_0021.xlsx",
+        "paper_info":         REPO_ROOT / "paper_info_0021.xlsx",
+        "author_year":        "CorporateBoards",
+        "focal_iv":           "post1_x_treat1",
+        "baseline_coef":      0.0331,
+        "baseline_se":        0.00457,
+        "baseline_pval":      5.78e-13,
+        "regression_outputs": PAPER_OUTPUT / "Paper_0021_CorporateBoards" / "regression_outputs",
+        "key_vars":           ["ptita", "mb", "lev", "aret"],
+        "mechanisms":   ["MCAR", "MAR", "NMAR"],
+        "pct_strings":  ["1pct", "5pct", "10pct", "20pct", "30pct", "40pct", "50pct"],
+        "methods":      ["LD", "Mean", "Reg", "Iter", "RF", "DL", "MILGBM"],
+        "n_iters":      30,
+        "txt_has_data": True,
+        # Run was interrupted and resumed — in-memory workbook only covers the last session.
+        # Rebuild summary sheets from the complete txt files.
+        "rebuild_summary": True,
+    },
 }
 
 # ---------------------------------------------------------------------------

@@ -9,7 +9,7 @@ Updated: 2026-04-12
 | 0018 | AntiCorruption | BASELINE_INVESTIGATION | lrdeff_postremoval ~0.006 p=0.10 | Focal IV borderline; verify vs published table before proceeding. |
 | 0019 | AntidiscrimLaws | DELIVERABLE_DONE | -0.0110** | 13,230/13,230. 313 singularity errors (benign). Committed + pushed. |
 | 0020 | CompetingAttention | DELIVERABLE_DONE | 1.137* | 13,230/13,230. 0 errors. Committed + pushed. |
-| 0021 | CorporateBoards | FULL_IN_PROGRESS | 0.033*** | Smoke passed. Full run just launched (N=21,898). |
+| 0021 | CorporateBoards | DELIVERABLE_DONE | 0.033*** | 17,640/17,640. 0 errors. AuthorYearReport_0021.xlsx (2.7 MB, 19 sheets, rebuild_summary). 1 null-byte txt (MAR/1pct/aret/MILGBM/iter4) — benign. Committed + pushed. |
 | 0022 | DemandPull | DELIVERABLE_DONE | 0.374~ | 13,230/13,230. 0 errors. Committed + pushed. |
 | 0023 | EffectIPO | DELIVERABLE_DONE | -0.041*** | 17,640/17,640. 0 errors. AuthorYearReport_0023.xlsx (1.7 MB, 19 sheets). Summary sheets rebuilt from txt (resumed run). Committed + pushed. |
 | 0024 | HedingHill | SMOKE_DONE | -0.031*** | Smoke passed. Awaiting full run slot. |
