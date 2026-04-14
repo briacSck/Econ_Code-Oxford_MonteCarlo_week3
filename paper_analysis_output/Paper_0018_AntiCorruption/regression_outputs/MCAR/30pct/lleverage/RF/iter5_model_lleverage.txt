@@ -1,0 +1,29 @@
+Paper: 0018
+KeyVar: lleverage
+Mechanism: MCAR
+Proportion: 30pct
+Method: RF
+Iteration: 5
+---
+FocalIV: lrdefficiency_postremoval
+Coef: 0.005942
+SE: 0.003563
+pval: 0.095637
+Nobs: 10439
+Sign: +1
+Significant: False
+---
+                           Estimate  Std. Error  ...      2.5%     97.5%
+Coefficient                                      ...                    
+lrdefficiency_postremoval  0.005942    0.003563  ... -0.001048  0.012931
+lrdefficiency              0.000821    0.000647  ... -0.000449  0.002090
+laetc_s                    0.060646    0.019745  ...  0.021910  0.099382
+lpostremoval               0.000095    0.000233  ... -0.000362  0.000551
+laetc_postremoval         -0.059187    0.021823  ... -0.101998 -0.016375
+lsoe                      -0.001150    0.000702  ... -0.002528  0.000228
+lpolitical                 0.000138    0.000292  ... -0.000435  0.000712
+lroa                      -0.003394    0.001378  ... -0.006098 -0.000691
+ltobinq                   -0.000047    0.000048  ... -0.000141  0.000047
+lleverage                 -0.000681    0.000396  ... -0.001458  0.000096
+
+[10 rows x 6 columns]

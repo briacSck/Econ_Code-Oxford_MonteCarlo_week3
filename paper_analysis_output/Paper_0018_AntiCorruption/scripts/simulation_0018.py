@@ -80,9 +80,9 @@ class Config:
     DEPENDENT_VAR = "subsidy_s"
     FOCAL_IV = "lrdefficiency_postremoval"
     CONTROLS = [
+        "lrdefficiency",        # level term (Stata spec: lrdefficiency alongside the interaction)
         "laetc_s",
         "lpostremoval",
-        "lrdefficiency_postremoval",
         "laetc_postremoval",
         "lsoe",
         "lpolitical",
@@ -111,6 +111,7 @@ class Config:
     PREDICTOR_POOL = [
         "subsidy_s",
         "lrdefficiency_postremoval",
+        "lrdefficiency",
         "laetc_s",
         "lpostremoval",
         "laetc_postremoval",

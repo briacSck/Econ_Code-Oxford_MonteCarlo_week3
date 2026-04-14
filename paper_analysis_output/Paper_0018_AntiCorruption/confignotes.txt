@@ -8,11 +8,18 @@ Stata spec: reghdfe subsidy_s lrdefficiency laetc_s lpostremoval lrdefficiency_p
 Dependent variable: subsidy_s (government subsidy, standardized)
 Focal IV: lrdefficiency_postremoval — R&D efficiency × post-removal interaction (main DiD coefficient)
   Note: lrdefficiency (level) is non-significant; lrdefficiency_postremoval is the paper's main finding
-BASELINE STATUS: INVESTIGATION (2026-04-10)
-  lrdefficiency_postremoval coef ~ 0.006, SE ~ 0.004, p ~ 0.096 (marginally significant)
-  Need to confirm against published Table 5 Panel A
-Key variables: lroa, ltobinq, lleverage
-MAR control: age
+BASELINE STATUS: MATCHED (2026-04-13)
+  lrdefficiency_postremoval coef ~ 0.006, SE ~ 0.004, p ~ 0.096
+  Published Table 5, Panel A, Col 6 (firm+year FE, cluster firm): β=0.006, SE=0.004, p<0.10 (*) — exact match.
+  GATE 1 PASSED. No preprocessing or spec mismatch.
+
+  Note: single-star result in preferred spec by design (most demanding FE absorbs variation).
+  Expect elevated "Sign Same, Sig Changed" output even at low missingness — not a bug.
+  Secondary focal: laetc_postremoval is *** in col 6 (-0.059, SE=0.022) — tracked for reporting.
+
+Key variables: lroa, ltobinq, lleverage (3 vars; continuous, complete, substantively important controls)
+MAR control: age (complete, correlated with firm characteristics, not in key vars)
 Cluster: firm
 FE: firm + year
-Status: BASELINE_INVESTIGATION (focal IV changed; verify against published table)
+Grid: 3 mechs x 7 props x 3 key vars x 30 iters x 7 methods = 13,230 runs
+Status: BASELINE_MATCHED — smoke test running 2026-04-13

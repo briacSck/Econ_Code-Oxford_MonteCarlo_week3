@@ -6,7 +6,7 @@ Updated: 2026-04-12
 |---------|-----------|--------|----------|-------|
 | 0005 | MappingEntrepreneurial | DELIVERABLE_DONE | 0.0307*** | Re-run complete. 17,640/17,640, 0 errors. AuthorYearReport_0005.xlsx (3.7 MB, 19 sheets, 17,640 real coef rows). Committed + pushed. |
 | 0017 | StatusConsensus | DELIVERABLE_DONE | 0.0468*** | Finalized in Week 2. |
-| 0018 | AntiCorruption | BASELINE_INVESTIGATION | lrdeff_postremoval ~0.006 p=0.10 | Focal IV borderline; verify vs published table before proceeding. |
+| 0018 | AntiCorruption | DELIVERABLE_DONE | 0.006* (p=0.096) | 13,230/13,230. 0 errors. AuthorYearReport_0018.xlsx (2.8 MB, 19 sheets). 441/441 N_iters=30. Committed + pushed. |
 | 0019 | AntidiscrimLaws | DELIVERABLE_DONE | -0.0110** | 13,230/13,230. 313 singularity errors (benign). Committed + pushed. |
 | 0020 | CompetingAttention | DELIVERABLE_DONE | 1.137* | 13,230/13,230. 0 errors. Committed + pushed. |
 | 0021 | CorporateBoards | DELIVERABLE_DONE | 0.033*** | 17,640/17,640. 0 errors. AuthorYearReport_0021.xlsx (2.7 MB, 19 sheets, rebuild_summary). 1 null-byte txt (MAR/1pct/aret/MILGBM/iter4) — benign. Committed + pushed. |

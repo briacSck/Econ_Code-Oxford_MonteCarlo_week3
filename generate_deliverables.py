@@ -173,6 +173,24 @@ PAPERS = {
         # Rebuild from the complete txt files.
         "rebuild_summary": True,
     },
+    "0018": {
+        "paper_dir":          PAPER_OUTPUT / "Paper_0018_AntiCorruption",
+        "workbook":           PAPER_OUTPUT / "Paper_0018_AntiCorruption" / "full_run" / "AntiCorruptionReport_0018.xlsx",
+        "paper_info":         REPO_ROOT / "paper_info_0018.xlsx",
+        "author_year":        "AntiCorruption",
+        "focal_iv":           "lrdefficiency_postremoval",
+        "baseline_coef":      0.00595,
+        "baseline_se":        0.00357,
+        "baseline_pval":      0.0959,
+        "regression_outputs": PAPER_OUTPUT / "Paper_0018_AntiCorruption" / "regression_outputs",
+        "key_vars":           ["lroa", "ltobinq", "lleverage"],
+        "mechanisms":   ["MCAR", "MAR", "NMAR"],
+        "pct_strings":  ["1pct", "5pct", "10pct", "20pct", "30pct", "40pct", "50pct"],
+        "methods":      ["LD", "Mean", "Reg", "Iter", "RF", "DL", "MILGBM"],
+        "n_iters":      30,
+        "txt_has_data": True,
+        # Source workbook is complete (single uninterrupted session) — no rebuild needed.
+    },
     "0021": {
         "paper_dir":          PAPER_OUTPUT / "Paper_0021_CorporateBoards",
         "workbook":           PAPER_OUTPUT / "Paper_0021_CorporateBoards" / "full_run" / "CorporateBoardsReport_0021.xlsx",

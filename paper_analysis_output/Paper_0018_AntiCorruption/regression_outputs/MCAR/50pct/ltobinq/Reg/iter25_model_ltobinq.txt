@@ -1,0 +1,29 @@
+Paper: 0018
+KeyVar: ltobinq
+Mechanism: MCAR
+Proportion: 50pct
+Method: Reg
+Iteration: 25
+---
+FocalIV: lrdefficiency_postremoval
+Coef: 0.005954
+SE: 0.003596
+pval: 0.097981
+Nobs: 10439
+Sign: +1
+Significant: False
+---
+                           Estimate  Std. Error  ...          2.5%     97.5%
+Coefficient                                      ...                        
+lrdefficiency_postremoval  0.005954    0.003596  ... -1.099768e-03  0.013008
+lrdefficiency              0.000767    0.000644  ... -4.974028e-04  0.002031
+laetc_s                    0.061337    0.019593  ...  2.290161e-02  0.099773
+lpostremoval               0.000110    0.000232  ... -3.449058e-04  0.000565
+laetc_postremoval         -0.063110    0.021772  ... -1.058222e-01 -0.020398
+lsoe                      -0.000998    0.000693  ... -2.357570e-03  0.000361
+lpolitical                 0.000144    0.000292  ... -4.278829e-04  0.000716
+lroa                      -0.004631    0.001410  ... -7.396589e-03 -0.001866
+ltobinq                    0.000063    0.000032  ... -7.145359e-07  0.000126
+lleverage                 -0.002148    0.000622  ... -3.367633e-03 -0.000928
+
+[10 rows x 6 columns]
