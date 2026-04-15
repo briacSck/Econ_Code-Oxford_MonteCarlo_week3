@@ -1,0 +1,114 @@
+2026-04-10 02:11:21,904  INFO  ============================================================
+2026-04-10 02:11:21,905  INFO  Paper 0024 -- Mode: SMOKE
+2026-04-10 02:11:21,905  INFO  ============================================================
+2026-04-10 02:11:21,906  INFO  Loading from C:\Users\briac\Econ_Code\Oxford_MonteCarlo_week3\paper_analysis_output\Paper_0024_HedingHill\DATA.csv
+
+========================================================================
+DATA INSPECTION  Source: DATA.csv  Shape: 34,782 x 58
+========================================================================
+  MISSING  volinvcapx                               0.1068
+  MISSING  d_volinvcapx                             0.1068
+  MISSING  volinvrd                                 0.0766
+  MISSING  d_volinvrd                               0.0766
+  MISSING  volinvacq                                0.1215
+  MISSING  d_volinvacq                              0.1215
+  MISSING  volearnib                                0.0820
+  MISSING  d_volearnib                              0.0820
+  MISSING  volearnpti                               0.0820
+  MISSING  d_volearnpti                             0.0820
+  MISSING  volearncashetr                           0.4552
+  MISSING  d_volearncashetr                         0.4552
+  MISSING  ret                                      0.0959
+  MISSING  earnm1                                   0.0125
+  MISSING  earn                                     0.0122
+  MISSING  earnp1                                   0.0918
+  MISSING  earnm1politicalhedge                     0.0125
+  MISSING  earnpoliticalhedge                       0.0122
+  MISSING  earnp1politicalhedge                     0.0918
+  MISSING  retp1                                    0.0001
+  OK  idiovol                                  mean=   0.4311  std=   0.2785  missing=0
+  OK  politicalhedge                           mean=   0.1154  std=   0.2718  missing=0
+  OK  politicalconnections                     mean=   0.6900  std=   1.5620  missing=0
+  OK  mktvol                                   mean=   0.2154  std=   0.0903  missing=0
+  OK  beta                                     mean=   0.8958  std=   0.7485  missing=0
+  OK  mve                                      mean=   6.0220  std=   1.9806  missing=0
+  OK  btm                                      mean=   0.6952  std=   0.3066  missing=0
+  OK  roa                                      mean=  -0.0071  std=   0.2172  missing=0
+  OK  loss                                     mean=   0.2636  std=   0.4406  missing=0
+  OK  cash                                     mean=   0.1916  std=   0.2262  missing=0
+  OK  govtsales                                mean=   0.0215  std=   0.1031  missing=0
+  OK  zscore                                   mean=   0.9970  std=   2.2931  missing=0
+  OK  leverage                                 mean=   0.1971  std=   0.1948  missing=0
+  OK  competition                              mean=   0.0904  std=   0.0482  missing=0
+  OK  ppe                                      mean=   0.2434  std=   0.2707  missing=0
+========================================================================
+2026-04-10 02:11:22,691  INFO  Running baseline regression (pyfixest)...
+2026-04-10 02:11:22,774  INFO  Regression sample N = 34,782
+========================================================================
+BASELINE REGRESSION -- Table 2, Column 3  N=34,782
+========================================================================
+  politicalhedge                                 -0.0311     0.0094     0.0009 ***
+  politicalconnections                            0.0038     0.0025     0.1243 
+  mktvol                                          0.2422     0.0202     0.0000 ***
+  beta                                            0.0288     0.0024     0.0000 ***
+  mve                                            -0.0430     0.0028     0.0000 ***
+  btm                                            -0.0460     0.0092     0.0000 ***
+  roa                                            -0.1510     0.0141     0.0000 ***
+  loss                                            0.0472     0.0042     0.0000 ***
+  cash                                           -0.0394     0.0129     0.0024 **
+  govtsales                                      -0.0471     0.0239     0.0493 *
+  zscore                                          0.0077     0.0017     0.0000 ***
+  leverage                                        0.0477     0.0114     0.0000 ***
+  competition                                     0.0803     0.0364     0.0274 *
+  ppe                                             0.0727     0.0133     0.0000 ***
+###
+
+Estimation:  OLS
+Dep. var.: idiovol, Fixed effects: gvkey + year
+sample: None = all
+Inference:  CRV1
+Observations:  32404
+
+| Coefficient          |   Estimate |   Std. Error |   t value |   Pr(>|t|) |   2.5% |   97.5% |
+|:---------------------|-----------:|-------------:|----------:|-----------:|-------:|--------:|
+| politicalhedge       |     -0.031 |        0.009 |    -3.312 |      0.001 | -0.049 |  -0.013 |
+| politicalconnections |      0.004 |        0.002 |     1.537 |      0.124 | -0.001 |   0.009 |
+| mktvol               |      0.242 |        0.020 |    11.967 |      0.000 |  0.203 |   0.282 |
+| beta                 |      0.029 |        0.002 |    11.931 |      0.000 |  0.024 |   0.033 |
+| mve                  |     -0.043 |        0.003 |   -15.176 |      0.000 | -0.049 |  -0.037 |
+| btm                  |     -0.046 |        0.009 |    -5.006 |      0.000 | -0.064 |  -0.028 |
+| roa                  |     -0.151 |        0.014 |   -10.731 |      0.000 | -0.179 |  -0.123 |
+| loss                 |      0.047 |        0.004 |    11.221 |      0.000 |  0.039 |   0.055 |
+| cash                 |     -0.039 |        0.013 |    -3.041 |      0.002 | -0.065 |  -0.014 |
+| govtsales            |     -0.047 |        0.024 |    -1.966 |      0.049 | -0.094 |  -0.000 |
+| zscore               |      0.008 |        0.002 |     4.559 |      0.000 |  0.004 |   0.011 |
+| leverage             |      0.048 |        0.011 |     4.187 |      0.000 |  0.025 |   0.070 |
+| competition          |      0.080 |        0.036 |     2.206 |      0.027 |  0.009 |   0.152 |
+| ppe                  |      0.073 |        0.013 |     5.484 |      0.000 |  0.047 |   0.099 |
+---
+RMSE: 0.147 R2: 0.69 R2 Within: 0.075 
+========================================================================
+2026-04-10 02:12:04,763  INFO  SMOKE TEST: 3 mechs x 2 levels x 1 var x 2 iters x 7 methods = 84 runs
+2026-04-10 02:12:04,764  INFO  Resuming: 0 combinations already complete
+2026-04-10 02:12:04,766  INFO  Baseline focal coef: {'coef': -0.031074397934959985, 'se': 0.00938303217770186, 'pval': 0.0009326257308024388, 'nobs': 32404, 'sign': -1, 'sig': True}
+2026-04-10 02:12:04,804  INFO    MCAR | 1pct | mktvol
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1775779936.347351   45296 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1775779939.085530   45296 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+I0000 00:00:1775779939.759941   45296 cpu_feature_guard.cc:227] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2026-04-10 02:12:19,865  WARNING  TensorFlow GPU support is not available on native Windows for TensorFlow >= 2.11. Even if CUDA/cuDNN are installed, GPU will not be used. Please use WSL2 or the TensorFlow-DirectML plugin.
+2026-04-10 02:13:22,546  WARNING  From C:\Users\briac\Econ_Code\Oxford_MonteCarlo_week3\venv\Lib\site-packages\keras\src\backend\common\global_state.py:82: The name tf.reset_default_graph is deprecated. Please use tf.compat.v1.reset_default_graph instead.
+
+2026-04-10 02:14:24,879  INFO    MCAR | 10pct | mktvol
+2026-04-10 02:22:46,708  INFO    MAR | 1pct | mktvol
+2026-04-10 02:27:24,069  INFO    MAR | 10pct | mktvol
+2026-04-10 02:30:50,036  INFO      Progress: 50 done, 0 errors
+2026-04-10 02:33:19,425  INFO    NMAR | 1pct | mktvol
+2026-04-10 02:37:40,586  INFO    NMAR | 10pct | mktvol
+2026-04-10 02:41:26,223  INFO  Simulation complete: 84 done, 0 errors
+2026-04-10 02:41:26,223  INFO  Computing NMAR diagnostics...
+2026-04-10 02:41:39,745  INFO  Writing Excel workbook to C:\Users\briac\Econ_Code\Oxford_MonteCarlo_week3\paper_analysis_output\Paper_0024_HedingHill\smoke\SMOKE_HedingHillReport_0024.xlsx ...
+2026-04-10 02:41:40,678  INFO  Workbook written: C:\Users\briac\Econ_Code\Oxford_MonteCarlo_week3\paper_analysis_output\Paper_0024_HedingHill\smoke\SMOKE_HedingHillReport_0024.xlsx
+2026-04-10 02:41:40,680  INFO  Smoke test complete.

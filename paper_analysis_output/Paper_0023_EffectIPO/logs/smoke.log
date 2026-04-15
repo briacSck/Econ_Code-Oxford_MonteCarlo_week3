@@ -1,0 +1,127 @@
+2026-04-10 02:11:20,219  INFO  ============================================================
+2026-04-10 02:11:20,221  INFO  Paper 0023 -- Mode: SMOKE
+2026-04-10 02:11:20,221  INFO  ============================================================
+2026-04-10 02:11:20,221  INFO  Loading from C:\Users\briac\Econ_Code\Oxford_MonteCarlo_week3\paper_analysis_output\Paper_0023_EffectIPO\DATA.csv
+
+========================================================================
+DATA INSPECTION  Source: DATA.csv  Shape: 12,211 x 95
+========================================================================
+  MISSING  mve                                      0.0902
+  MISSING  ipo_news_LN_high                         0.3589
+  MISSING  lagibes_net_pre                          0.3746
+  MISSING  ch_gtrends_ipo_1m_neg                    0.5683
+  MISSING  ln_gtrends_filing_mth                    0.6230
+  MISSING  ln_gtrends_filing_l12m                   0.5843
+  MISSING  ln_num_analyst                           0.3044
+  MISSING  ch_f1_num_analyst_pct                    0.3586
+  MISSING  turnover_mth_1m                          0.1692
+  MISSING  abs_vwret_mth_1m                         0.1704
+  MISSING  mtb                                      0.0905
+  MISSING  ln_mve                                   0.0902
+  MISSING  ch1_ewret                                0.1673
+  MISSING  ch1_turnover                             0.1662
+  MISSING  ch1_retsd                                0.1674
+  MISSING  ch1_mtb                                  0.0948
+  MISSING  diff_fn_tax_cosine                       0.2516
+  MISSING  diff_fn_nontax_cosine                    0.2516
+  MISSING  ab_ch_vaa_pos                            0.6329
+  MISSING  ab_ch_vaa_neg                            0.6329
+  MISSING  ab_ch_tax_res_pos                        0.1642
+  MISSING  ab_ch_tax_res_neg                        0.1642
+  MISSING  diff_lagroa_pretax                       0.0024
+  MISSING  diff_lagcfo_pretax                       0.0043
+  MISSING  ipo_lagab_acc_high                       0.1184
+  MISSING  ipo_lagab_acc_abs_high                   0.1184
+  MISSING  ipo_lagfsd_score_high                    0.1184
+  OK  ch1_gaap_etr                             mean=   0.0188  std=   0.1709  missing=0
+  OK  diff_laggaap_etr                         mean=  -0.0135  std=   0.2215  missing=0
+  OK  diff_median_laggaap_etr                  mean=  -0.0027  std=   0.1567  missing=0
+  OK  ch1_s_rd                                 mean=  -0.0002  std=   0.0122  missing=0
+  OK  ch1_s_ad                                 mean=  -0.0003  std=   0.0086  missing=0
+  OK  ch1_s_sga                                mean=  -0.0051  std=   0.0462  missing=0
+  OK  ch1_s_capexp                             mean=   0.0013  std=   0.0715  missing=0
+  OK  ch1_s_cash                               mean=  -0.0041  std=   0.0833  missing=0
+  OK  ch1_s_fi                                 mean=   0.0005  std=   0.0161  missing=0
+  OK  ch1_s_eqinc                              mean=   0.0000  std=   0.0022  missing=0
+  OK  ch1_nol                                  mean=   0.0109  std=   0.2494  missing=0
+  OK  ch1_s_intangible                         mean=   0.0089  std=   0.0775  missing=0
+  OK  ch1_s_ppent                              mean=  -0.0017  std=   0.0479  missing=0
+  OK  ch1_s_fcf                                mean=  -0.0017  std=   0.0871  missing=0
+  OK  ch1_size                                 mean=   0.1225  std=   0.2119  missing=0
+  OK  ch1_roa_pretax                           mean=   0.0014  std=   0.0661  missing=0
+  OK  ch1_lev_lt                               mean=   0.0019  std=   0.0739  missing=0
+========================================================================
+2026-04-10 02:11:20,854  INFO  Running baseline regression (pyfixest)...
+2026-04-10 02:11:20,935  INFO  Regression sample N = 12,211
+========================================================================
+BASELINE REGRESSION -- Table 3, Column 1  N=12,211
+========================================================================
+  diff_laggaap_etr                               -0.0409     0.0088     0.0000 ***
+  diff_median_laggaap_etr                        -0.5922     0.0173     0.0000 ***
+  ch1_s_rd                                       -0.0050     0.1063     0.9628 
+  ch1_s_ad                                       -0.0610     0.1450     0.6738 
+  ch1_s_sga                                      -0.0186     0.0330     0.5728 
+  ch1_s_capexp                                   -0.0421     0.0225     0.0617 
+  ch1_s_cash                                      0.0069     0.0211     0.7428 
+  ch1_s_fi                                       -0.3839     0.1335     0.0041 **
+  ch1_s_eqinc                                    -1.4955     0.7197     0.0378 *
+  ch1_nol                                        -0.0019     0.0054     0.7282 
+  ch1_s_intangible                                0.0160     0.0233     0.4916 
+  ch1_s_ppent                                     0.0910     0.0336     0.0068 **
+  ch1_s_fcf                                      -0.0527     0.0199     0.0083 **
+  ch1_size                                        0.0457     0.0090     0.0000 ***
+  ch1_roa_pretax                                  0.3223     0.0336     0.0000 ***
+  ch1_lev_lt                                     -0.0057     0.0219     0.7944 
+###
+
+Estimation:  OLS
+Dep. var.: ch1_gaap_etr, Fixed effects: fyear
+sample: None = all
+Inference:  CRV1
+Observations:  12211
+
+| Coefficient             |   Estimate |   Std. Error |   t value |   Pr(>|t|) |   2.5% |   97.5% |
+|:------------------------|-----------:|-------------:|----------:|-----------:|-------:|--------:|
+| diff_laggaap_etr        |     -0.041 |        0.009 |    -4.676 |      0.000 | -0.058 |  -0.024 |
+| diff_median_laggaap_etr |     -0.592 |        0.017 |   -34.232 |      0.000 | -0.626 |  -0.558 |
+| ch1_s_rd                |     -0.005 |        0.106 |    -0.047 |      0.963 | -0.213 |   0.203 |
+| ch1_s_ad                |     -0.061 |        0.145 |    -0.421 |      0.674 | -0.345 |   0.223 |
+| ch1_s_sga               |     -0.019 |        0.033 |    -0.564 |      0.573 | -0.083 |   0.046 |
+| ch1_s_capexp            |     -0.042 |        0.023 |    -1.869 |      0.062 | -0.086 |   0.002 |
+| ch1_s_cash              |      0.007 |        0.021 |     0.328 |      0.743 | -0.034 |   0.048 |
+| ch1_s_fi                |     -0.384 |        0.133 |    -2.876 |      0.004 | -0.646 |  -0.122 |
+| ch1_s_eqinc             |     -1.496 |        0.720 |    -2.078 |      0.038 | -2.907 |  -0.084 |
+| ch1_nol                 |     -0.002 |        0.005 |    -0.348 |      0.728 | -0.012 |   0.009 |
+| ch1_s_intangible        |      0.016 |        0.023 |     0.688 |      0.492 | -0.030 |   0.062 |
+| ch1_s_ppent             |      0.091 |        0.034 |     2.706 |      0.007 |  0.025 |   0.157 |
+| ch1_s_fcf               |     -0.053 |        0.020 |    -2.641 |      0.008 | -0.092 |  -0.014 |
+| ch1_size                |      0.046 |        0.009 |     5.096 |      0.000 |  0.028 |   0.063 |
+| ch1_roa_pretax          |      0.322 |        0.034 |     9.600 |      0.000 |  0.256 |   0.388 |
+| ch1_lev_lt              |     -0.006 |        0.022 |    -0.261 |      0.794 | -0.049 |   0.037 |
+---
+RMSE: 0.135 R2: 0.377 R2 Within: 0.374 
+========================================================================
+2026-04-10 02:11:58,136  INFO  SMOKE TEST: 3 mechs x 2 levels x 1 var x 2 iters x 7 methods = 84 runs
+2026-04-10 02:11:58,136  INFO  Resuming: 0 combinations already complete
+2026-04-10 02:11:58,139  INFO  Baseline focal coef: {'coef': -0.0409495412300286, 'se': 0.008756998493106334, 'pval': 3.029649211949703e-06, 'nobs': 12211, 'sign': -1, 'sig': True}
+2026-04-10 02:11:58,157  INFO    MCAR | 1pct | ch1_s_rd
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1775779923.339720   41972 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1775779926.775615   41972 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+I0000 00:00:1775779927.542833   41972 cpu_feature_guard.cc:227] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2026-04-10 02:12:07,734  WARNING  TensorFlow GPU support is not available on native Windows for TensorFlow >= 2.11. Even if CUDA/cuDNN are installed, GPU will not be used. Please use WSL2 or the TensorFlow-DirectML plugin.
+2026-04-10 02:12:22,935  WARNING  From C:\Users\briac\Econ_Code\Oxford_MonteCarlo_week3\venv\Lib\site-packages\keras\src\backend\common\global_state.py:82: The name tf.reset_default_graph is deprecated. Please use tf.compat.v1.reset_default_graph instead.
+
+2026-04-10 02:12:51,339  INFO    MCAR | 10pct | ch1_s_rd
+2026-04-10 02:13:41,211  INFO    MAR | 1pct | ch1_s_rd
+2026-04-10 02:15:37,185  INFO    MAR | 10pct | ch1_s_rd
+2026-04-10 02:17:02,251  INFO      Progress: 50 done, 0 errors
+2026-04-10 02:17:54,962  INFO    NMAR | 1pct | ch1_s_rd
+2026-04-10 02:18:53,013  INFO    NMAR | 10pct | ch1_s_rd
+2026-04-10 02:21:21,423  INFO  Simulation complete: 84 done, 0 errors
+2026-04-10 02:21:21,424  INFO  Computing NMAR diagnostics...
+2026-04-10 02:21:26,072  INFO  Writing Excel workbook to C:\Users\briac\Econ_Code\Oxford_MonteCarlo_week3\paper_analysis_output\Paper_0023_EffectIPO\smoke\SMOKE_EffectIPOReport_0023.xlsx ...
+2026-04-10 02:21:27,455  INFO  Workbook written: C:\Users\briac\Econ_Code\Oxford_MonteCarlo_week3\paper_analysis_output\Paper_0023_EffectIPO\smoke\SMOKE_EffectIPOReport_0023.xlsx
+2026-04-10 02:21:27,457  INFO  Smoke test complete.

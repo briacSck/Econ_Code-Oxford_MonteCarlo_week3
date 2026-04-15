@@ -1,0 +1,68 @@
+2026-04-10 02:00:04,064  INFO  ============================================================
+2026-04-10 02:00:04,065  INFO  Paper 0022 -- Mode: SMOKE
+2026-04-10 02:00:04,065  INFO  ============================================================
+2026-04-10 02:00:04,065  INFO  Loading from C:\Users\briac\Econ_Code\Oxford_MonteCarlo_week3\paper_analysis_output\Paper_0022_DemandPull\DATA.csv
+
+========================================================================
+DATA INSPECTION  Source: DATA.csv  Shape: 472 x 27
+========================================================================
+  MISSING  TeamSize                                 0.0042
+  MISSING  TimeEffort                               0.1864
+  MISSING  CustomerInteraction                      0.1864
+  MISSING  ExpertInteraction                        0.1864
+  MISSING  Networking                               0.1864
+  MISSING  RevenueLikert                            0.1653
+  MISSING  CustomersLikert                          0.1716
+  OK  RevenueLikert                            mean=   1.5787  std=   1.1167  missing=78
+  OK  Post_x_Treatment                         mean=   0.2564  std=   0.4371  missing=0
+  OK  Post                                     mean=   0.5000  std=   0.5005  missing=0
+  OK  Age                                      mean=  35.3686  std=  11.4712  missing=0
+  OK  WorkExp                                  mean=   1.9661  std=   1.3727  missing=0
+  OK  EntrepExperience                         mean=   0.5636  std=   0.4965  missing=0
+========================================================================
+2026-04-10 02:00:04,127  INFO  Running baseline regression (pyfixest)...
+2026-04-10 02:00:04,132  INFO  Regression sample N = 394
+========================================================================
+BASELINE REGRESSION -- Table 3, Panel A  N=394
+========================================================================
+  Post_x_Treatment                                0.3739     0.1913     0.0523 
+  Post                                            0.0357     0.1090     0.7437 
+###
+
+Estimation:  OLS
+Dep. var.: RevenueLikert, Fixed effects: SN
+sample: None = all
+Inference:  hetero
+Observations:  334
+
+| Coefficient      |   Estimate |   Std. Error |   t value |   Pr(>|t|) |   2.5% |   97.5% |
+|:-----------------|-----------:|-------------:|----------:|-----------:|-------:|--------:|
+| Post_x_Treatment |      0.374 |        0.191 |     1.955 |      0.052 | -0.004 |   0.752 |
+| Post             |      0.036 |        0.109 |     0.328 |      0.744 | -0.180 |   0.251 |
+---
+RMSE: 0.613 R2: 0.708 R2 Within: 0.053 
+========================================================================
+2026-04-10 02:00:14,930  INFO  SMOKE TEST: 3 mechs x 2 levels x 1 var x 2 iters x 7 methods = 84 runs
+2026-04-10 02:00:14,930  INFO  Resuming: 0 combinations already complete
+2026-04-10 02:00:14,933  INFO  Baseline focal coef: {'coef': 0.3739242685025817, 'se': 0.1912672804981339, 'pval': 0.05227471331269862, 'nobs': 334, 'sign': 1, 'sig': False}
+2026-04-10 02:00:14,934  INFO    MCAR | 1pct | Age
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1775779215.489662   18260 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1775779218.114570   18260 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+I0000 00:00:1775779218.594051   18260 cpu_feature_guard.cc:227] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2026-04-10 02:00:18,695  WARNING  TensorFlow GPU support is not available on native Windows for TensorFlow >= 2.11. Even if CUDA/cuDNN are installed, GPU will not be used. Please use WSL2 or the TensorFlow-DirectML plugin.
+2026-04-10 02:00:22,838  WARNING  From C:\Users\briac\Econ_Code\Oxford_MonteCarlo_week3\venv\Lib\site-packages\keras\src\backend\common\global_state.py:82: The name tf.reset_default_graph is deprecated. Please use tf.compat.v1.reset_default_graph instead.
+
+2026-04-10 02:00:28,938  INFO    MCAR | 10pct | Age
+2026-04-10 02:00:41,746  INFO    MAR | 1pct | Age
+2026-04-10 02:00:52,668  INFO    MAR | 10pct | Age
+2026-04-10 02:00:57,850  INFO      Progress: 50 done, 0 errors
+2026-04-10 02:01:03,470  INFO    NMAR | 1pct | Age
+2026-04-10 02:01:13,128  INFO    NMAR | 10pct | Age
+2026-04-10 02:01:25,014  INFO  Simulation complete: 84 done, 0 errors
+2026-04-10 02:01:25,015  INFO  Computing NMAR diagnostics...
+2026-04-10 02:01:25,690  INFO  Writing Excel workbook to C:\Users\briac\Econ_Code\Oxford_MonteCarlo_week3\paper_analysis_output\Paper_0022_DemandPull\smoke\SMOKE_DemandPullReport_0022.xlsx ...
+2026-04-10 02:01:25,928  INFO  Workbook written: C:\Users\briac\Econ_Code\Oxford_MonteCarlo_week3\paper_analysis_output\Paper_0022_DemandPull\smoke\SMOKE_DemandPullReport_0022.xlsx
+2026-04-10 02:01:25,928  INFO  Smoke test complete.

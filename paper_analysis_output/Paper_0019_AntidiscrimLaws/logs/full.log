@@ -1,0 +1,749 @@
+2026-04-10 02:04:04,477  INFO  ============================================================
+2026-04-10 02:04:04,477  INFO  Paper 0019 -- Mode: FULL
+2026-04-10 02:04:04,477  INFO  ============================================================
+2026-04-10 02:04:04,478  INFO  Loading from C:\Users\briac\Econ_Code\Oxford_MonteCarlo_week3\paper_analysis_output\Paper_0019_AntidiscrimLaws\DATA.csv
+
+========================================================================
+DATA INSPECTION  Source: DATA.csv  Shape: 13,633 x 44
+========================================================================
+  MISSING  lev_lt_at                                0.0827
+  MISSING  lev_dlc_dltt_at                          0.0612
+  MISSING  ni_at                                    0.0118
+  MISSING  ppent_at                                 0.0034
+  MISSING  lev_mkt                                  0.4349
+  MISSING  div_payer                                0.0003
+  MISSING  ni_at_vol                                0.2528
+  MISSING  sic_2                                    0.0997
+  MISSING  empgrw                                   0.2899
+  MISSING  oibdp_atw                                0.0263
+  MISSING  ni_atw                                   0.0118
+  MISSING  sale_emp                                 0.1843
+  MISSING  ni_at_beg                                0.0301
+  MISSING  ppent_at_beg                             0.0098
+  MISSING  div_payer_beg                            0.0005
+  MISSING  pctbk50_sma                              0.0685
+  MISSING  r_migpr_50_70                            0.1590
+  MISSING  r_herf_ind                               0.0338
+  OK  oibdp_atw                                mean=   0.1755  std=   0.0910  missing=358
+  OK  ad_law2                                  mean=   0.6132  std=   0.4870  missing=0
+  OK  ln_at_adj                                mean=   3.8178  std=   1.6013  missing=0
+  OK  ppent_at                                 mean=   0.3513  std=   0.1852  missing=47
+  OK  div_payer                                mean=   0.8191  std=   0.3849  missing=4
+  OK  state_inc_growth                         mean=   2.5371  std=   2.9081  missing=0
+========================================================================
+2026-04-10 02:04:04,686  INFO  Running baseline regression (pyfixest)...
+2026-04-10 02:04:04,691  INFO  Regression sample N = 13,247
+========================================================================
+BASELINE REGRESSION -- Table 4, Operating Profitability  N=13,247
+========================================================================
+  ad_law2                                        -0.0110     0.0034     0.0013 **
+  ln_at_adj                                       0.0052     0.0041     0.2052 
+  ppent_at                                       -0.1382     0.0205     0.0000 ***
+  div_payer                                       0.0259     0.0046     0.0000 ***
+  state_inc_growth                                0.0020     0.0004     0.0000 ***
+###
+
+Estimation:  OLS
+Dep. var.: oibdp_atw, Fixed effects: cm_id + fyear
+sample: None = all
+Inference:  CRV1
+Observations:  13235
+
+| Coefficient          |   Estimate |   Std. Error |   t value |   Pr(>|t|) |   2.5% |   97.5% |
+|:---------------------|-----------:|-------------:|----------:|-----------:|-------:|--------:|
+| ad_law2              |     -0.011 |        0.003 |    -3.214 |      0.001 | -0.018 |  -0.004 |
+| ln_at_adj            |      0.005 |        0.004 |     1.267 |      0.205 | -0.003 |   0.013 |
+| ppent_at             |     -0.138 |        0.021 |    -6.731 |      0.000 | -0.178 |  -0.098 |
+| div_payer            |      0.026 |        0.005 |     5.670 |      0.000 |  0.017 |   0.035 |
+| state_inc_growth     |      0.002 |        0.000 |     5.197 |      0.000 |  0.001 |   0.003 |
+| state_id::1.0:fyear  |      0.002 |        0.001 |     1.413 |      0.158 | -0.001 |   0.004 |
+| state_id::3.0:fyear  |      0.006 |        0.008 |     0.728 |      0.467 | -0.010 |   0.021 |
+| state_id::4.0:fyear  |      0.001 |        0.005 |     0.189 |      0.850 | -0.009 |   0.011 |
+| state_id::5.0:fyear  |      0.003 |        0.002 |     2.005 |      0.045 |  0.000 |   0.006 |
+| state_id::6.0:fyear  |      0.002 |        0.003 |     0.561 |      0.575 | -0.004 |   0.007 |
+| state_id::7.0:fyear  |      0.002 |        0.002 |     0.963 |      0.336 | -0.002 |   0.005 |
+| state_id::10.0:fyear |      0.004 |        0.002 |     1.973 |      0.049 |  0.000 |   0.008 |
+| state_id::11.0:fyear |      0.002 |        0.002 |     1.176 |      0.240 | -0.002 |   0.006 |
+| state_id::12.0:fyear |      0.024 |        0.011 |     2.089 |      0.037 |  0.001 |   0.046 |
+| state_id::14.0:fyear |      0.002 |        0.001 |     1.404 |      0.161 | -0.001 |   0.004 |
+| state_id::15.0:fyear |      0.002 |        0.002 |     1.415 |      0.157 | -0.001 |   0.006 |
+| state_id::17.0:fyear |      0.008 |        0.003 |     2.450 |      0.014 |  0.002 |   0.014 |
+| state_id::18.0:fyear |      0.002 |        0.004 |     0.517 |      0.605 | -0.005 |   0.009 |
+| state_id::19.0:fyear |     -0.006 |        0.005 |    -1.320 |      0.187 | -0.015 |   0.003 |
+| state_id::21.0:fyear |      0.007 |        0.002 |     3.915 |      0.000 |  0.003 |   0.010 |
+| state_id::22.0:fyear |      0.002 |        0.001 |     1.394 |      0.164 | -0.001 |   0.004 |
+| state_id::23.0:fyear |      0.002 |        0.002 |     1.261 |      0.208 | -0.001 |   0.006 |
+| state_id::24.0:fyear |      0.003 |        0.002 |     1.761 |      0.078 | -0.000 |   0.007 |
+| state_id::25.0:fyear |     -0.009 |        0.009 |    -1.073 |      0.283 | -0.026 |   0.008 |
+| state_id::26.0:fyear |      0.005 |        0.001 |     3.369 |      0.001 |  0.002 |   0.007 |
+| state_id::28.0:fyear |      0.057 |        0.012 |     4.952 |      0.000 |  0.034 |   0.080 |
+| state_id::29.0:fyear |     -0.017 |        0.003 |    -5.584 |      0.000 | -0.023 |  -0.011 |
+| state_id::30.0:fyear |      0.006 |        0.003 |     2.190 |      0.029 |  0.001 |   0.011 |
+| state_id::31.0:fyear |      0.002 |        0.001 |     1.417 |      0.157 | -0.001 |   0.004 |
+| state_id::32.0:fyear |     -0.068 |        0.008 |    -8.248 |      0.000 | -0.084 |  -0.052 |
+| state_id::33.0:fyear |      0.002 |        0.001 |     1.453 |      0.147 | -0.001 |   0.004 |
+| state_id::34.0:fyear |      0.001 |        0.002 |     0.430 |      0.667 | -0.004 |   0.005 |
+| state_id::36.0:fyear |      0.002 |        0.001 |     1.370 |      0.171 | -0.001 |   0.004 |
+| state_id::38.0:fyear |     -0.004 |        0.004 |    -0.911 |      0.363 | -0.012 |   0.004 |
+| state_id::39.0:fyear |      0.002 |        0.001 |     1.415 |      0.157 | -0.001 |   0.004 |
+| state_id::40.0:fyear |      0.010 |        0.001 |     6.621 |      0.000 |  0.007 |   0.013 |
+| state_id::41.0:fyear |      0.001 |        0.002 |     0.544 |      0.587 | -0.003 |   0.005 |
+| state_id::43.0:fyear |      0.002 |        0.004 |     0.536 |      0.592 | -0.005 |   0.009 |
+| state_id::44.0:fyear |     -0.001 |        0.002 |    -0.437 |      0.662 | -0.004 |   0.003 |
+| state_id::45.0:fyear |      0.008 |        0.002 |     3.913 |      0.000 |  0.004 |   0.012 |
+| state_id::47.0:fyear |      0.001 |        0.002 |     0.403 |      0.687 | -0.003 |   0.005 |
+| state_id::48.0:fyear |     -0.000 |        0.001 |    -0.197 |      0.844 | -0.003 |   0.003 |
+---
+RMSE: 0.049 R2: 0.708 R2 Within: 0.055 
+========================================================================
+2026-04-10 02:04:36,524  INFO  FULL RUN: 3 x 7 x 3 x 30 x 7 = 13230 runs
+2026-04-10 02:04:36,525  INFO  Resuming: 0 combinations already complete
+2026-04-10 02:04:36,527  INFO  Baseline focal coef: {'coef': -0.010972880569337812, 'se': 0.0034141729140311056, 'pval': 0.0013353208621125212, 'nobs': 13235, 'sign': -1, 'sig': True}
+2026-04-10 02:04:36,535  INFO    MCAR | 1pct | ln_at_adj
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1775779478.697345   43372 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1775779481.182796   43372 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+I0000 00:00:1775779481.663761   43372 cpu_feature_guard.cc:227] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2026-04-10 02:04:41,776  WARNING  TensorFlow GPU support is not available on native Windows for TensorFlow >= 2.11. Even if CUDA/cuDNN are installed, GPU will not be used. Please use WSL2 or the TensorFlow-DirectML plugin.
+2026-04-10 02:04:51,496  WARNING  From C:\Users\briac\Econ_Code\Oxford_MonteCarlo_week3\venv\Lib\site-packages\keras\src\backend\common\global_state.py:82: The name tf.reset_default_graph is deprecated. Please use tf.compat.v1.reset_default_graph instead.
+
+2026-04-10 02:06:45,537  INFO      Progress: 50 done, 0 errors
+2026-04-10 02:07:19,627  WARNING  ERROR: MCAR|1pct|ln_at_adj|LD|9: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 02:08:36,624  INFO      Progress: 100 done, 1 errors
+2026-04-10 02:09:49,862  WARNING  ERROR: MCAR|1pct|ln_at_adj|DL|18: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 02:10:26,648  INFO      Progress: 150 done, 2 errors
+2026-04-10 02:10:55,639  WARNING  ERROR: MCAR|1pct|ln_at_adj|Iter|23: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 02:12:59,639  INFO      Progress: 200 done, 3 errors
+2026-04-10 02:13:30,496  INFO    MCAR | 1pct | ppent_at
+2026-04-10 02:17:32,641  WARNING  ERROR: MCAR|1pct|ppent_at|LD|4: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 02:18:31,585  INFO      Progress: 250 done, 4 errors
+2026-04-10 02:25:34,151  WARNING  ERROR: MCAR|1pct|ppent_at|Iter|11: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 02:27:17,555  WARNING  ERROR: MCAR|1pct|ppent_at|LD|13: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 02:27:23,761  INFO      Progress: 300 done, 6 errors
+2026-04-10 02:34:36,106  WARNING  ERROR: MCAR|1pct|ppent_at|Iter|20: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 02:35:35,380  INFO      Progress: 350 done, 7 errors
+2026-04-10 02:41:46,235  INFO      Progress: 400 done, 7 errors
+2026-04-10 02:43:37,406  INFO    MCAR | 1pct | state_inc_growth
+2026-04-10 02:48:00,480  INFO      Progress: 450 done, 7 errors
+2026-04-10 02:54:19,261  INFO      Progress: 500 done, 7 errors
+2026-04-10 02:56:46,583  WARNING  ERROR: MCAR|1pct|state_inc_growth|LD|15: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 02:57:26,967  WARNING  ERROR: MCAR|1pct|state_inc_growth|DL|15: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 02:58:28,792  WARNING  ERROR: MCAR|1pct|state_inc_growth|Iter|17: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 03:00:51,938  INFO      Progress: 550 done, 10 errors
+2026-04-10 03:02:32,682  WARNING  ERROR: MCAR|1pct|state_inc_growth|Iter|22: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 03:06:45,057  INFO      Progress: 600 done, 11 errors
+2026-04-10 03:08:28,596  WARNING  ERROR: MCAR|1pct|state_inc_growth|Mean|29: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 03:09:14,791  INFO    MCAR | 5pct | ln_at_adj
+2026-04-10 03:12:28,181  INFO      Progress: 650 done, 12 errors
+2026-04-10 03:16:05,822  WARNING  ERROR: MCAR|5pct|ln_at_adj|Iter|8: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 03:17:05,979  WARNING  ERROR: MCAR|5pct|ln_at_adj|Iter|9: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 03:18:48,613  WARNING  ERROR: MCAR|5pct|ln_at_adj|LD|11: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 03:19:37,194  INFO      Progress: 700 done, 15 errors
+2026-04-10 03:20:22,968  WARNING  ERROR: MCAR|5pct|ln_at_adj|LD|13: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 03:22:45,613  WARNING  ERROR: MCAR|5pct|ln_at_adj|DL|15: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 03:23:44,470  WARNING  ERROR: MCAR|5pct|ln_at_adj|Mean|17: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 03:24:32,162  WARNING  ERROR: MCAR|5pct|ln_at_adj|Iter|18: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 03:25:46,474  INFO      Progress: 750 done, 19 errors
+2026-04-10 03:29:16,080  WARNING  ERROR: MCAR|5pct|ln_at_adj|RF|24: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 03:31:32,907  INFO      Progress: 800 done, 20 errors
+2026-04-10 03:33:54,022  INFO    MCAR | 5pct | ppent_at
+2026-04-10 03:38:17,169  INFO      Progress: 850 done, 20 errors
+2026-04-10 03:44:33,737  INFO      Progress: 900 done, 20 errors
+2026-04-10 03:45:45,547  WARNING  ERROR: MCAR|5pct|ppent_at|LD|12: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 03:51:35,227  INFO      Progress: 950 done, 21 errors
+2026-04-10 03:59:34,077  INFO      Progress: 1000 done, 21 errors
+2026-04-10 04:00:39,318  WARNING  ERROR: MCAR|5pct|ppent_at|LD|27: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 04:03:12,840  INFO    MCAR | 5pct | state_inc_growth
+2026-04-10 04:06:08,571  INFO      Progress: 1050 done, 22 errors
+2026-04-10 04:09:03,270  WARNING  ERROR: MCAR|5pct|state_inc_growth|LD|6: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 04:09:52,214  WARNING  ERROR: MCAR|5pct|state_inc_growth|Iter|7: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 04:12:25,914  WARNING  ERROR: MCAR|5pct|state_inc_growth|LD|10: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 04:12:31,234  INFO      Progress: 1100 done, 25 errors
+2026-04-10 04:19:29,597  INFO      Progress: 1150 done, 25 errors
+2026-04-10 04:24:39,535  WARNING  ERROR: MCAR|5pct|state_inc_growth|LD|23: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 04:25:35,079  WARNING  ERROR: MCAR|5pct|state_inc_growth|Reg|24: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 04:26:21,528  WARNING  ERROR: MCAR|5pct|state_inc_growth|LD|25: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 04:26:22,850  INFO      Progress: 1200 done, 28 errors
+2026-04-10 04:30:33,564  INFO    MCAR | 10pct | ln_at_adj
+2026-04-10 04:32:03,788  INFO      Progress: 1250 done, 28 errors
+2026-04-10 04:38:10,326  INFO      Progress: 1300 done, 28 errors
+2026-04-10 04:43:05,487  WARNING  ERROR: MCAR|10pct|ln_at_adj|Iter|15: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 04:44:37,204  WARNING  ERROR: MCAR|10pct|ln_at_adj|DL|16: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 04:44:46,857  INFO      Progress: 1350 done, 30 errors
+2026-04-10 04:47:17,953  WARNING  ERROR: MCAR|10pct|ln_at_adj|LD|20: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 04:47:20,826  WARNING  ERROR: MCAR|10pct|ln_at_adj|Iter|20: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 04:47:50,828  WARNING  ERROR: MCAR|10pct|ln_at_adj|DL|20: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 04:50:35,904  INFO      Progress: 1400 done, 33 errors
+2026-04-10 04:54:56,062  WARNING  ERROR: MCAR|10pct|ln_at_adj|LD|29: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 04:55:51,491  INFO    MCAR | 10pct | ppent_at
+2026-04-10 04:55:54,737  WARNING  ERROR: MCAR|10pct|ppent_at|Iter|0: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 04:57:01,478  WARNING  ERROR: MCAR|10pct|ppent_at|Iter|1: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 04:58:01,789  INFO      Progress: 1450 done, 36 errors
+2026-04-10 04:59:01,988  WARNING  ERROR: MCAR|10pct|ppent_at|Iter|3: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 04:59:56,873  WARNING  ERROR: MCAR|10pct|ppent_at|Iter|4: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 05:04:23,717  INFO      Progress: 1500 done, 38 errors
+2026-04-10 05:05:29,183  WARNING  ERROR: MCAR|10pct|ppent_at|LD|10: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 05:07:08,606  WARNING  ERROR: MCAR|10pct|ppent_at|LD|12: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 05:08:01,469  WARNING  ERROR: MCAR|10pct|ppent_at|Iter|13: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 05:11:25,620  WARNING  ERROR: MCAR|10pct|ppent_at|LD|17: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 05:11:26,912  INFO      Progress: 1550 done, 42 errors
+2026-04-10 05:14:15,040  WARNING  ERROR: MCAR|10pct|ppent_at|Iter|20: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 05:18:04,071  INFO      Progress: 1600 done, 43 errors
+2026-04-10 05:19:06,169  WARNING  ERROR: MCAR|10pct|ppent_at|Iter|25: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 05:23:46,947  INFO    MCAR | 10pct | state_inc_growth
+2026-04-10 05:25:27,140  INFO      Progress: 1650 done, 44 errors
+2026-04-10 05:31:47,828  WARNING  ERROR: MCAR|10pct|state_inc_growth|LD|8: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 05:32:42,841  INFO      Progress: 1700 done, 45 errors
+2026-04-10 05:36:45,458  WARNING  ERROR: MCAR|10pct|state_inc_growth|LD|14: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 05:38:34,965  INFO      Progress: 1750 done, 46 errors
+2026-04-10 05:41:24,421  WARNING  ERROR: MCAR|10pct|state_inc_growth|Iter|19: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 05:43:45,882  WARNING  ERROR: MCAR|10pct|state_inc_growth|RF|22: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 05:45:22,558  INFO      Progress: 1800 done, 48 errors
+2026-04-10 05:48:38,834  WARNING  ERROR: MCAR|10pct|state_inc_growth|Iter|27: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 05:51:01,213  INFO    MCAR | 20pct | ln_at_adj
+2026-04-10 05:51:03,003  WARNING  ERROR: MCAR|20pct|ln_at_adj|Reg|0: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 05:51:50,086  INFO      Progress: 1850 done, 50 errors
+2026-04-10 05:52:34,906  WARNING  ERROR: MCAR|20pct|ln_at_adj|Mean|2: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 05:56:48,694  WARNING  ERROR: MCAR|20pct|ln_at_adj|Reg|7: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 05:58:03,656  INFO      Progress: 1900 done, 52 errors
+2026-04-10 05:59:10,169  WARNING  ERROR: MCAR|20pct|ln_at_adj|Iter|10: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 05:59:58,705  WARNING  ERROR: MCAR|20pct|ln_at_adj|Iter|11: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 06:04:19,126  INFO      Progress: 1950 done, 54 errors
+2026-04-10 06:05:11,014  WARNING  ERROR: MCAR|20pct|ln_at_adj|LD|17: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 06:09:58,373  WARNING  ERROR: MCAR|20pct|ln_at_adj|Iter|22: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 06:10:44,221  INFO      Progress: 2000 done, 56 errors
+2026-04-10 06:16:31,036  INFO    MCAR | 20pct | ppent_at
+2026-04-10 06:17:13,871  INFO      Progress: 2050 done, 56 errors
+2026-04-10 06:24:35,653  INFO      Progress: 2100 done, 56 errors
+2026-04-10 06:30:40,235  INFO      Progress: 2150 done, 56 errors
+2026-04-10 06:35:30,560  WARNING  ERROR: MCAR|20pct|ppent_at|LD|20: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 06:37:45,069  WARNING  ERROR: MCAR|20pct|ppent_at|LD|22: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 06:37:48,264  INFO      Progress: 2200 done, 58 errors
+2026-04-10 06:44:01,925  WARNING  ERROR: MCAR|20pct|ppent_at|LD|28: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 06:45:50,813  INFO      Progress: 2250 done, 59 errors
+2026-04-10 06:46:00,268  INFO    MCAR | 20pct | state_inc_growth
+2026-04-10 06:50:14,534  WARNING  ERROR: MCAR|20pct|state_inc_growth|Iter|4: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 06:53:03,334  INFO      Progress: 2300 done, 60 errors
+2026-04-10 06:53:08,362  WARNING  ERROR: MCAR|20pct|state_inc_growth|RF|7: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 06:59:44,957  INFO      Progress: 2350 done, 61 errors
+2026-04-10 07:05:57,794  INFO      Progress: 2400 done, 61 errors
+2026-04-10 07:11:47,965  WARNING  ERROR: MCAR|20pct|state_inc_growth|Iter|27: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 07:13:35,346  INFO      Progress: 2450 done, 62 errors
+2026-04-10 07:14:35,835  INFO    MCAR | 30pct | ln_at_adj
+2026-04-10 07:19:43,844  INFO      Progress: 2500 done, 62 errors
+2026-04-10 07:21:35,033  WARNING  ERROR: MCAR|30pct|ln_at_adj|Mean|8: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 07:25:34,613  INFO      Progress: 2550 done, 63 errors
+2026-04-10 07:32:02,921  INFO      Progress: 2600 done, 63 errors
+2026-04-10 07:33:47,885  WARNING  ERROR: MCAR|30pct|ln_at_adj|Iter|22: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 07:35:09,148  WARNING  ERROR: MCAR|30pct|ln_at_adj|LD|24: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 07:35:54,431  WARNING  ERROR: MCAR|30pct|ln_at_adj|LD|25: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 07:36:45,664  WARNING  ERROR: MCAR|30pct|ln_at_adj|RF|26: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 07:38:07,981  INFO      Progress: 2650 done, 67 errors
+2026-04-10 07:39:52,756  INFO    MCAR | 30pct | ppent_at
+2026-04-10 07:43:41,790  WARNING  ERROR: MCAR|30pct|ppent_at|Iter|4: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 07:44:48,927  INFO      Progress: 2700 done, 68 errors
+2026-04-10 07:52:02,716  INFO      Progress: 2750 done, 68 errors
+2026-04-10 07:55:01,404  WARNING  ERROR: MCAR|30pct|ppent_at|Iter|15: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 07:58:58,476  INFO      Progress: 2800 done, 69 errors
+2026-04-10 08:05:06,714  WARNING  ERROR: MCAR|30pct|ppent_at|Iter|26: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 08:05:59,246  INFO      Progress: 2850 done, 70 errors
+2026-04-10 08:08:51,129  INFO    MCAR | 30pct | state_inc_growth
+2026-04-10 08:08:51,492  WARNING  ERROR: MCAR|30pct|state_inc_growth|LD|0: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 08:08:51,839  WARNING  ERROR: MCAR|30pct|state_inc_growth|Mean|0: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 08:12:09,125  WARNING  ERROR: MCAR|30pct|state_inc_growth|DL|3: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 08:12:25,044  INFO      Progress: 2900 done, 73 errors
+2026-04-10 08:19:26,859  INFO      Progress: 2950 done, 73 errors
+2026-04-10 08:23:55,123  WARNING  ERROR: MCAR|30pct|state_inc_growth|Mean|17: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 08:25:34,868  INFO      Progress: 3000 done, 74 errors
+2026-04-10 08:59:51,121  WARNING  ERROR: MCAR|30pct|state_inc_growth|Iter|25: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:00:02,002  WARNING  ERROR: MCAR|30pct|state_inc_growth|LD|26: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:00:02,857  INFO      Progress: 3050 done, 76 errors
+2026-04-10 09:00:25,827  WARNING  ERROR: MCAR|30pct|state_inc_growth|Reg|28: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:00:45,767  WARNING  ERROR: MCAR|30pct|state_inc_growth|Iter|29: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:00:56,996  INFO    MCAR | 40pct | ln_at_adj
+2026-04-10 09:01:11,384  WARNING  ERROR: MCAR|40pct|ln_at_adj|Iter|1: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:01:24,593  WARNING  ERROR: MCAR|40pct|ln_at_adj|Iter|2: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:01:35,650  WARNING  ERROR: MCAR|40pct|ln_at_adj|LD|3: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:01:48,942  INFO      Progress: 3100 done, 81 errors
+2026-04-10 09:03:55,368  INFO      Progress: 3150 done, 81 errors
+2026-04-10 09:05:29,169  WARNING  ERROR: MCAR|40pct|ln_at_adj|RF|16: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:06:10,811  INFO      Progress: 3200 done, 82 errors
+2026-04-10 09:07:11,791  WARNING  ERROR: MCAR|40pct|ln_at_adj|LD|22: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:08:11,370  INFO      Progress: 3250 done, 83 errors
+2026-04-10 09:09:06,427  WARNING  ERROR: MCAR|40pct|ln_at_adj|DL|29: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:09:08,936  INFO    MCAR | 40pct | ppent_at
+2026-04-10 09:09:56,747  WARNING  ERROR: MCAR|40pct|ppent_at|LD|3: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:09:57,785  INFO      Progress: 3300 done, 85 errors
+2026-04-10 09:12:15,953  INFO      Progress: 3350 done, 85 errors
+2026-04-10 09:13:00,069  WARNING  ERROR: MCAR|40pct|ppent_at|Iter|13: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:15:05,305  INFO      Progress: 3400 done, 86 errors
+2026-04-10 09:17:26,688  INFO      Progress: 3450 done, 86 errors
+2026-04-10 09:18:33,785  WARNING  ERROR: MCAR|40pct|ppent_at|LD|29: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:18:56,662  INFO    MCAR | 40pct | state_inc_growth
+2026-04-10 09:19:26,987  INFO      Progress: 3500 done, 87 errors
+2026-04-10 09:19:39,862  WARNING  ERROR: MCAR|40pct|state_inc_growth|Iter|3: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:20:35,919  WARNING  ERROR: MCAR|40pct|state_inc_growth|Iter|7: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:21:01,960  WARNING  ERROR: MCAR|40pct|state_inc_growth|LD|9: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:21:02,791  WARNING  ERROR: MCAR|40pct|state_inc_growth|Iter|9: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:21:21,388  INFO      Progress: 3550 done, 91 errors
+2026-04-10 09:21:22,218  WARNING  ERROR: MCAR|40pct|state_inc_growth|Iter|10: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:22:04,575  WARNING  ERROR: MCAR|40pct|state_inc_growth|Iter|13: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:22:16,718  WARNING  ERROR: MCAR|40pct|state_inc_growth|Iter|14: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:22:42,554  WARNING  ERROR: MCAR|40pct|state_inc_growth|LD|16: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:23:06,167  INFO      Progress: 3600 done, 95 errors
+2026-04-10 09:24:12,503  WARNING  ERROR: MCAR|40pct|state_inc_growth|Iter|22: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:24:27,735  WARNING  ERROR: MCAR|40pct|state_inc_growth|LD|23: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:24:28,715  WARNING  ERROR: MCAR|40pct|state_inc_growth|Iter|23: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:25:00,045  WARNING  ERROR: MCAR|40pct|state_inc_growth|LD|25: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:25:01,227  INFO      Progress: 3650 done, 99 errors
+2026-04-10 09:26:20,217  INFO    MCAR | 50pct | ln_at_adj
+2026-04-10 09:26:21,408  WARNING  ERROR: MCAR|50pct|ln_at_adj|Iter|0: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:26:37,131  WARNING  ERROR: MCAR|50pct|ln_at_adj|Iter|1: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:26:51,229  WARNING  ERROR: MCAR|50pct|ln_at_adj|Iter|2: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:27:04,603  INFO      Progress: 3700 done, 102 errors
+2026-04-10 09:27:05,463  WARNING  ERROR: MCAR|50pct|ln_at_adj|Iter|3: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:27:51,081  WARNING  ERROR: MCAR|50pct|ln_at_adj|Iter|6: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:28:04,699  WARNING  ERROR: MCAR|50pct|ln_at_adj|Iter|7: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:28:16,585  WARNING  ERROR: MCAR|50pct|ln_at_adj|LD|8: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:28:31,309  WARNING  ERROR: MCAR|50pct|ln_at_adj|Iter|9: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:29:00,096  INFO      Progress: 3750 done, 107 errors
+2026-04-10 09:30:47,250  INFO      Progress: 3800 done, 107 errors
+2026-04-10 09:31:20,658  WARNING  ERROR: MCAR|50pct|ln_at_adj|LD|20: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:32:36,128  INFO      Progress: 3850 done, 108 errors
+2026-04-10 09:32:51,731  WARNING  ERROR: MCAR|50pct|ln_at_adj|RF|26: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:34:06,308  INFO    MCAR | 50pct | ppent_at
+2026-04-10 09:34:49,476  INFO      Progress: 3900 done, 109 errors
+2026-04-10 09:37:17,410  INFO      Progress: 3950 done, 109 errors
+2026-04-10 09:37:21,411  WARNING  ERROR: MCAR|50pct|ppent_at|Iter|10: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:39:34,045  INFO      Progress: 4000 done, 110 errors
+2026-04-10 09:40:27,815  WARNING  ERROR: MCAR|50pct|ppent_at|LD|20: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:42:00,263  INFO      Progress: 4050 done, 111 errors
+2026-04-10 09:43:13,672  WARNING  ERROR: MCAR|50pct|ppent_at|Iter|28: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:43:51,006  INFO    MCAR | 50pct | state_inc_growth
+2026-04-10 09:44:14,443  INFO      Progress: 4100 done, 112 errors
+2026-04-10 09:45:22,284  WARNING  ERROR: MCAR|50pct|state_inc_growth|Reg|5: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:46:36,529  INFO      Progress: 4150 done, 113 errors
+2026-04-10 09:48:38,695  INFO      Progress: 4200 done, 113 errors
+2026-04-10 09:50:08,641  WARNING  ERROR: MCAR|50pct|state_inc_growth|RF|20: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:51:06,653  WARNING  ERROR: MCAR|50pct|state_inc_growth|RF|22: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:51:27,228  INFO      Progress: 4250 done, 115 errors
+2026-04-10 09:51:43,387  WARNING  ERROR: MCAR|50pct|state_inc_growth|DL|23: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:53:41,320  INFO    MAR | 1pct | ln_at_adj
+2026-04-10 09:53:42,649  WARNING  ERROR: MAR|1pct|ln_at_adj|Iter|0: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:53:59,249  INFO      Progress: 4300 done, 117 errors
+2026-04-10 09:55:39,968  WARNING  ERROR: MAR|1pct|ln_at_adj|Reg|6: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:56:20,122  INFO      Progress: 4350 done, 118 errors
+2026-04-10 09:58:03,790  WARNING  ERROR: MAR|1pct|ln_at_adj|LD|13: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 09:58:49,735  INFO      Progress: 4400 done, 119 errors
+2026-04-10 10:00:16,667  WARNING  ERROR: MAR|1pct|ln_at_adj|LD|19: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 10:01:38,859  INFO      Progress: 4450 done, 120 errors
+2026-04-10 10:03:17,229  WARNING  ERROR: MAR|1pct|ln_at_adj|Iter|26: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 10:04:41,521  INFO    MAR | 1pct | ppent_at
+2026-04-10 10:04:41,825  INFO      Progress: 4500 done, 121 errors
+2026-04-10 10:07:40,580  INFO      Progress: 4550 done, 121 errors
+2026-04-10 10:09:22,491  WARNING  ERROR: MAR|1pct|ppent_at|LD|11: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 10:09:45,709  WARNING  ERROR: MAR|1pct|ppent_at|LD|12: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 10:10:30,577  WARNING  ERROR: MAR|1pct|ppent_at|LD|14: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 10:10:51,429  INFO      Progress: 4600 done, 124 errors
+2026-04-10 10:13:45,632  INFO      Progress: 4650 done, 124 errors
+2026-04-10 10:16:44,918  INFO      Progress: 4700 done, 124 errors
+2026-04-10 10:17:05,397  INFO    MAR | 1pct | state_inc_growth
+2026-04-10 10:18:57,826  WARNING  ERROR: MAR|1pct|state_inc_growth|RF|5: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 10:19:14,035  INFO      Progress: 4750 done, 125 errors
+2026-04-10 10:19:34,150  WARNING  ERROR: MAR|1pct|state_inc_growth|Mean|7: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 10:21:53,045  WARNING  ERROR: MAR|1pct|state_inc_growth|Mean|13: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 10:22:16,080  INFO      Progress: 4800 done, 127 errors
+2026-04-10 10:23:56,171  WARNING  ERROR: MAR|1pct|state_inc_growth|Iter|18: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 10:24:39,977  WARNING  ERROR: MAR|1pct|state_inc_growth|LD|20: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 10:24:40,154  WARNING  ERROR: MAR|1pct|state_inc_growth|Mean|20: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 10:25:02,772  INFO      Progress: 4850 done, 130 errors
+2026-04-10 10:26:22,118  WARNING  ERROR: MAR|1pct|state_inc_growth|Mean|24: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 10:26:42,795  WARNING  ERROR: MAR|1pct|state_inc_growth|LD|25: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 10:27:01,753  WARNING  ERROR: MAR|1pct|state_inc_growth|Mean|26: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 10:27:28,118  WARNING  ERROR: MAR|1pct|state_inc_growth|Mean|27: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 10:28:13,694  INFO      Progress: 4900 done, 134 errors
+2026-04-10 10:28:34,099  INFO    MAR | 5pct | ln_at_adj
+2026-04-10 10:31:05,957  INFO      Progress: 4950 done, 134 errors
+2026-04-10 10:33:42,515  INFO      Progress: 5000 done, 134 errors
+2026-04-10 10:36:17,977  INFO      Progress: 5050 done, 134 errors
+2026-04-10 10:37:17,481  WARNING  ERROR: MAR|5pct|ln_at_adj|DL|21: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 10:37:21,064  WARNING  ERROR: MAR|5pct|ln_at_adj|LD|22: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 10:39:42,381  INFO      Progress: 5100 done, 136 errors
+2026-04-10 10:40:29,010  INFO    MAR | 5pct | ppent_at
+2026-04-10 10:42:29,593  INFO      Progress: 5150 done, 136 errors
+2026-04-10 10:44:10,602  WARNING  ERROR: MAR|5pct|ppent_at|LD|9: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 10:45:00,343  WARNING  ERROR: MAR|5pct|ppent_at|LD|11: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 10:45:23,506  INFO      Progress: 5200 done, 138 errors
+2026-04-10 10:49:22,493  INFO      Progress: 5250 done, 138 errors
+2026-04-10 10:52:14,523  WARNING  ERROR: MAR|5pct|ppent_at|Iter|26: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 10:52:38,202  INFO      Progress: 5300 done, 139 errors
+2026-04-10 10:53:04,952  WARNING  ERROR: MAR|5pct|ppent_at|Iter|28: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 10:53:50,238  INFO    MAR | 5pct | state_inc_growth
+2026-04-10 10:55:21,087  WARNING  ERROR: MAR|5pct|state_inc_growth|Mean|3: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 10:55:51,018  INFO      Progress: 5350 done, 141 errors
+2026-04-10 10:58:10,144  WARNING  ERROR: MAR|5pct|state_inc_growth|RF|10: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 10:58:36,264  INFO      Progress: 5400 done, 142 errors
+2026-04-10 10:59:44,609  WARNING  ERROR: MAR|5pct|state_inc_growth|Iter|13: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:01:59,726  INFO      Progress: 5450 done, 143 errors
+2026-04-10 11:03:38,329  WARNING  ERROR: MAR|5pct|state_inc_growth|RF|23: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:03:56,979  WARNING  ERROR: MAR|5pct|state_inc_growth|LD|24: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:04:45,932  INFO      Progress: 5500 done, 145 errors
+2026-04-10 11:05:45,160  WARNING  ERROR: MAR|5pct|state_inc_growth|DL|28: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:06:07,121  INFO    MAR | 10pct | ln_at_adj
+2026-04-10 11:07:01,270  WARNING  ERROR: MAR|10pct|ln_at_adj|LD|3: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:07:16,314  INFO      Progress: 5550 done, 147 errors
+2026-04-10 11:09:25,031  INFO      Progress: 5600 done, 147 errors
+2026-04-10 11:10:26,618  WARNING  ERROR: MAR|10pct|ln_at_adj|LD|15: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:10:58,035  WARNING  ERROR: MAR|10pct|ln_at_adj|DL|16: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:11:16,081  INFO      Progress: 5650 done, 149 errors
+2026-04-10 11:12:02,634  WARNING  ERROR: MAR|10pct|ln_at_adj|LD|21: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:13:09,133  INFO      Progress: 5700 done, 150 errors
+2026-04-10 11:14:14,410  WARNING  ERROR: MAR|10pct|ln_at_adj|Iter|29: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:14:29,937  INFO    MAR | 10pct | ppent_at
+2026-04-10 11:15:22,759  INFO      Progress: 5750 done, 151 errors
+2026-04-10 11:17:15,070  WARNING  ERROR: MAR|10pct|ppent_at|LD|10: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:17:15,267  INFO      Progress: 5800 done, 152 errors
+2026-04-10 11:18:44,029  WARNING  ERROR: MAR|10pct|ppent_at|Iter|15: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:19:17,750  INFO      Progress: 5850 done, 153 errors
+2026-04-10 11:19:33,494  WARNING  ERROR: MAR|10pct|ppent_at|LD|18: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:20:56,698  WARNING  ERROR: MAR|10pct|ppent_at|LD|23: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:21:31,527  INFO      Progress: 5900 done, 155 errors
+2026-04-10 11:23:13,371  INFO    MAR | 10pct | state_inc_growth
+2026-04-10 11:23:46,712  WARNING  ERROR: MAR|10pct|state_inc_growth|LD|2: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:23:46,901  INFO      Progress: 5950 done, 156 errors
+2026-04-10 11:25:48,113  INFO      Progress: 6000 done, 156 errors
+2026-04-10 11:27:38,158  WARNING  ERROR: MAR|10pct|state_inc_growth|Iter|15: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:27:58,514  INFO      Progress: 6050 done, 157 errors
+2026-04-10 11:30:27,528  INFO      Progress: 6100 done, 157 errors
+2026-04-10 11:32:23,307  INFO    MAR | 20pct | ln_at_adj
+2026-04-10 11:32:41,004  INFO      Progress: 6150 done, 157 errors
+2026-04-10 11:34:07,543  WARNING  ERROR: MAR|20pct|ln_at_adj|Mean|6: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:34:24,044  WARNING  ERROR: MAR|20pct|ln_at_adj|Iter|7: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:34:45,256  INFO      Progress: 6200 done, 159 errors
+2026-04-10 11:34:45,988  WARNING  ERROR: MAR|20pct|ln_at_adj|Iter|8: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:36:49,950  INFO      Progress: 6250 done, 160 errors
+2026-04-10 11:39:01,401  INFO      Progress: 6300 done, 160 errors
+2026-04-10 11:40:08,904  WARNING  ERROR: MAR|20pct|ln_at_adj|Iter|27: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:40:58,934  INFO    MAR | 20pct | ppent_at
+2026-04-10 11:40:59,156  INFO      Progress: 6350 done, 161 errors
+2026-04-10 11:42:56,892  WARNING  ERROR: MAR|20pct|ppent_at|LD|6: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:43:14,230  INFO      Progress: 6400 done, 162 errors
+2026-04-10 11:43:33,470  WARNING  ERROR: MAR|20pct|ppent_at|Iter|8: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:45:23,335  INFO      Progress: 6450 done, 163 errors
+2026-04-10 11:48:19,592  INFO      Progress: 6500 done, 163 errors
+2026-04-10 11:48:22,407  WARNING  ERROR: MAR|20pct|ppent_at|LD|22: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:49:52,004  WARNING  ERROR: MAR|20pct|ppent_at|Iter|26: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:50:16,266  WARNING  ERROR: MAR|20pct|ppent_at|Iter|27: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:50:52,045  INFO      Progress: 6550 done, 166 errors
+2026-04-10 11:51:09,558  INFO    MAR | 20pct | state_inc_growth
+2026-04-10 11:52:41,530  WARNING  ERROR: MAR|20pct|state_inc_growth|DL|4: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:53:06,384  INFO      Progress: 6600 done, 167 errors
+2026-04-10 11:54:17,091  WARNING  ERROR: MAR|20pct|state_inc_growth|Reg|10: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:55:06,676  WARNING  ERROR: MAR|20pct|state_inc_growth|LD|13: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:55:23,412  INFO      Progress: 6650 done, 169 errors
+2026-04-10 11:55:40,388  WARNING  ERROR: MAR|20pct|state_inc_growth|Iter|15: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:55:40,989  WARNING  ERROR: MAR|20pct|state_inc_growth|RF|15: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:57:39,894  WARNING  ERROR: MAR|20pct|state_inc_growth|Iter|20: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 11:57:55,699  INFO      Progress: 6700 done, 172 errors
+2026-04-10 11:58:09,513  WARNING  ERROR: MAR|20pct|state_inc_growth|Reg|22: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:00:13,000  INFO      Progress: 6750 done, 173 errors
+2026-04-10 12:00:32,535  INFO    MAR | 30pct | ln_at_adj
+2026-04-10 12:01:56,507  WARNING  ERROR: MAR|30pct|ln_at_adj|RF|4: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:02:29,952  INFO      Progress: 6800 done, 174 errors
+2026-04-10 12:02:45,902  WARNING  ERROR: MAR|30pct|ln_at_adj|Iter|7: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:04:51,968  INFO      Progress: 6850 done, 175 errors
+2026-04-10 12:05:36,129  WARNING  ERROR: MAR|30pct|ln_at_adj|LD|16: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:05:37,083  WARNING  ERROR: MAR|30pct|ln_at_adj|Iter|16: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:06:54,501  INFO      Progress: 6900 done, 177 errors
+2026-04-10 12:08:40,544  INFO      Progress: 6950 done, 177 errors
+2026-04-10 12:08:58,027  WARNING  ERROR: MAR|30pct|ln_at_adj|Iter|29: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:09:12,446  INFO    MAR | 30pct | ppent_at
+2026-04-10 12:09:13,557  WARNING  ERROR: MAR|30pct|ppent_at|Iter|0: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:10:37,335  INFO      Progress: 7000 done, 179 errors
+2026-04-10 12:13:06,946  INFO      Progress: 7050 done, 179 errors
+2026-04-10 12:13:37,108  WARNING  ERROR: MAR|30pct|ppent_at|Iter|14: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:15:08,504  INFO      Progress: 7100 done, 180 errors
+2026-04-10 12:16:59,512  INFO      Progress: 7150 done, 180 errors
+2026-04-10 12:17:47,651  INFO    MAR | 30pct | state_inc_growth
+2026-04-10 12:18:47,191  INFO      Progress: 7200 done, 180 errors
+2026-04-10 12:19:01,175  WARNING  ERROR: MAR|30pct|state_inc_growth|Iter|5: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:20:27,561  INFO      Progress: 7250 done, 181 errors
+2026-04-10 12:22:05,455  INFO      Progress: 7300 done, 181 errors
+2026-04-10 12:22:46,833  WARNING  ERROR: MAR|30pct|state_inc_growth|Reg|21: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:23:27,752  WARNING  ERROR: MAR|30pct|state_inc_growth|LD|24: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:23:56,547  INFO      Progress: 7350 done, 183 errors
+2026-04-10 12:24:56,308  INFO    MAR | 40pct | ln_at_adj
+2026-04-10 12:25:24,311  WARNING  ERROR: MAR|40pct|ln_at_adj|RF|2: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:25:35,443  WARNING  ERROR: MAR|40pct|ln_at_adj|LD|3: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:25:36,406  INFO      Progress: 7400 done, 185 errors
+2026-04-10 12:26:27,675  WARNING  ERROR: MAR|40pct|ln_at_adj|DL|6: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:26:59,135  WARNING  ERROR: MAR|40pct|ln_at_adj|Mean|9: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:27:27,746  INFO      Progress: 7450 done, 187 errors
+2026-04-10 12:29:01,736  INFO      Progress: 7500 done, 187 errors
+2026-04-10 12:30:44,402  INFO      Progress: 7550 done, 187 errors
+2026-04-10 12:31:52,159  INFO    MAR | 40pct | ppent_at
+2026-04-10 12:32:26,599  INFO      Progress: 7600 done, 187 errors
+2026-04-10 12:32:40,949  WARNING  ERROR: MAR|40pct|ppent_at|LD|3: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:34:07,598  INFO      Progress: 7650 done, 188 errors
+2026-04-10 12:35:50,005  WARNING  ERROR: MAR|40pct|ppent_at|Iter|16: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:36:01,560  INFO      Progress: 7700 done, 189 errors
+2026-04-10 12:37:42,854  INFO      Progress: 7750 done, 189 errors
+2026-04-10 12:38:43,184  WARNING  ERROR: MAR|40pct|ppent_at|Iter|28: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:39:12,060  INFO    MAR | 40pct | state_inc_growth
+2026-04-10 12:39:25,881  INFO      Progress: 7800 done, 190 errors
+2026-04-10 12:40:59,152  INFO      Progress: 7850 done, 190 errors
+2026-04-10 12:42:28,696  WARNING  ERROR: MAR|40pct|state_inc_growth|LD|14: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:42:53,696  INFO      Progress: 7900 done, 191 errors
+2026-04-10 12:44:40,347  INFO      Progress: 7950 done, 191 errors
+2026-04-10 12:44:52,251  WARNING  ERROR: MAR|40pct|state_inc_growth|DL|23: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:46:21,640  INFO    MAR | 50pct | ln_at_adj
+2026-04-10 12:46:22,063  INFO      Progress: 8000 done, 192 errors
+2026-04-10 12:47:03,471  WARNING  ERROR: MAR|50pct|ln_at_adj|Iter|3: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:47:15,091  WARNING  ERROR: MAR|50pct|ln_at_adj|LD|4: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:47:42,371  WARNING  ERROR: MAR|50pct|ln_at_adj|Iter|6: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:48:06,352  INFO      Progress: 8050 done, 195 errors
+2026-04-10 12:49:15,073  WARNING  ERROR: MAR|50pct|ln_at_adj|LD|13: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:49:44,502  WARNING  ERROR: MAR|50pct|ln_at_adj|LD|15: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:49:44,680  INFO      Progress: 8100 done, 197 errors
+2026-04-10 12:50:12,250  WARNING  ERROR: MAR|50pct|ln_at_adj|LD|17: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:50:12,359  WARNING  ERROR: MAR|50pct|ln_at_adj|Mean|17: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:50:56,676  WARNING  ERROR: MAR|50pct|ln_at_adj|Reg|20: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:50:57,245  WARNING  ERROR: MAR|50pct|ln_at_adj|Iter|20: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:51:37,024  INFO      Progress: 8150 done, 201 errors
+2026-04-10 12:53:08,613  INFO    MAR | 50pct | ppent_at
+2026-04-10 12:53:08,771  INFO      Progress: 8200 done, 201 errors
+2026-04-10 12:53:09,810  WARNING  ERROR: MAR|50pct|ppent_at|Iter|0: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:54:54,000  INFO      Progress: 8250 done, 202 errors
+2026-04-10 12:56:37,447  WARNING  ERROR: MAR|50pct|ppent_at|Iter|14: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 12:56:37,970  INFO      Progress: 8300 done, 203 errors
+2026-04-10 12:58:26,764  INFO      Progress: 8350 done, 203 errors
+2026-04-10 13:00:12,990  INFO      Progress: 8400 done, 203 errors
+2026-04-10 13:00:29,071  INFO    MAR | 50pct | state_inc_growth
+2026-04-10 13:01:11,257  WARNING  ERROR: MAR|50pct|state_inc_growth|RF|3: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:01:38,122  WARNING  ERROR: MAR|50pct|state_inc_growth|Iter|5: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:01:50,702  INFO      Progress: 8450 done, 205 errors
+2026-04-10 13:03:31,585  INFO      Progress: 8500 done, 205 errors
+2026-04-10 13:03:44,674  WARNING  ERROR: MAR|50pct|state_inc_growth|LD|14: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:03:46,353  WARNING  ERROR: MAR|50pct|state_inc_growth|RF|14: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:04:24,070  WARNING  ERROR: MAR|50pct|state_inc_growth|LD|17: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:04:37,159  WARNING  ERROR: MAR|50pct|state_inc_growth|DL|17: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:05:07,058  WARNING  ERROR: MAR|50pct|state_inc_growth|LD|20: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:05:20,714  INFO      Progress: 8550 done, 210 errors
+2026-04-10 13:06:00,794  WARNING  ERROR: MAR|50pct|state_inc_growth|LD|24: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:06:43,251  WARNING  ERROR: MAR|50pct|state_inc_growth|LD|27: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:07:12,268  INFO      Progress: 8600 done, 212 errors
+2026-04-10 13:07:28,832  INFO    NMAR | 1pct | ln_at_adj
+2026-04-10 13:08:20,447  WARNING  ERROR: NMAR|1pct|ln_at_adj|RF|3: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:08:35,339  WARNING  ERROR: NMAR|1pct|ln_at_adj|LD|4: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:08:36,395  WARNING  ERROR: NMAR|1pct|ln_at_adj|Iter|4: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:09:08,193  INFO      Progress: 8650 done, 215 errors
+2026-04-10 13:09:08,746  WARNING  ERROR: NMAR|1pct|ln_at_adj|Iter|6: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:10:12,122  WARNING  ERROR: NMAR|1pct|ln_at_adj|Iter|10: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:10:46,460  WARNING  ERROR: NMAR|1pct|ln_at_adj|Iter|12: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:11:22,052  INFO      Progress: 8700 done, 218 errors
+2026-04-10 13:11:38,502  WARNING  ERROR: NMAR|1pct|ln_at_adj|Iter|15: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:13:16,586  INFO      Progress: 8750 done, 219 errors
+2026-04-10 13:14:21,822  WARNING  ERROR: NMAR|1pct|ln_at_adj|Iter|25: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:15:08,531  WARNING  ERROR: NMAR|1pct|ln_at_adj|LD|28: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:15:10,522  INFO      Progress: 8800 done, 221 errors
+2026-04-10 13:15:41,518  INFO    NMAR | 1pct | ppent_at
+2026-04-10 13:16:01,022  WARNING  ERROR: NMAR|1pct|ppent_at|LD|1: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:17:26,127  INFO      Progress: 8850 done, 222 errors
+2026-04-10 13:18:39,189  WARNING  ERROR: NMAR|1pct|ppent_at|Iter|10: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:19:33,524  INFO      Progress: 8900 done, 223 errors
+2026-04-10 13:20:09,220  WARNING  ERROR: NMAR|1pct|ppent_at|LD|15: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:21:38,588  INFO      Progress: 8950 done, 224 errors
+2026-04-10 13:22:29,170  WARNING  ERROR: NMAR|1pct|ppent_at|LD|23: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:23:09,648  WARNING  ERROR: NMAR|1pct|ppent_at|Iter|25: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:24:05,016  INFO      Progress: 9000 done, 226 errors
+2026-04-10 13:24:24,825  WARNING  ERROR: NMAR|1pct|ppent_at|LD|29: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:24:40,837  INFO    NMAR | 1pct | state_inc_growth
+2026-04-10 13:25:13,848  WARNING  ERROR: NMAR|1pct|state_inc_growth|Reg|2: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:26:07,718  INFO      Progress: 9050 done, 228 errors
+2026-04-10 13:28:12,523  INFO      Progress: 9100 done, 228 errors
+2026-04-10 13:30:23,901  INFO      Progress: 9150 done, 228 errors
+2026-04-10 13:30:55,284  WARNING  ERROR: NMAR|1pct|state_inc_growth|LD|21: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:32:06,934  WARNING  ERROR: NMAR|1pct|state_inc_growth|Reg|25: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:32:42,338  INFO      Progress: 9200 done, 230 errors
+2026-04-10 13:32:43,423  WARNING  ERROR: NMAR|1pct|state_inc_growth|Iter|27: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:33:39,005  INFO    NMAR | 5pct | ln_at_adj
+2026-04-10 13:33:39,151  WARNING  ERROR: NMAR|5pct|ln_at_adj|LD|0: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:34:48,798  INFO      Progress: 9250 done, 232 errors
+2026-04-10 13:35:06,171  WARNING  ERROR: NMAR|5pct|ln_at_adj|LD|5: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:35:07,540  WARNING  ERROR: NMAR|5pct|ln_at_adj|Iter|5: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:36:22,588  WARNING  ERROR: NMAR|5pct|ln_at_adj|Iter|9: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:37:44,976  INFO      Progress: 9300 done, 235 errors
+2026-04-10 13:37:47,012  WARNING  ERROR: NMAR|5pct|ln_at_adj|Iter|12: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:39:26,145  WARNING  ERROR: NMAR|5pct|ln_at_adj|Iter|16: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:40:10,727  WARNING  ERROR: NMAR|5pct|ln_at_adj|Reg|18: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:40:38,034  INFO      Progress: 9350 done, 238 errors
+2026-04-10 13:41:01,094  WARNING  ERROR: NMAR|5pct|ln_at_adj|Iter|20: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:41:52,776  WARNING  ERROR: NMAR|5pct|ln_at_adj|Iter|22: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:43:02,092  WARNING  ERROR: NMAR|5pct|ln_at_adj|LD|25: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 13:43:48,267  INFO      Progress: 9400 done, 241 errors
+2026-04-10 13:46:40,155  INFO    NMAR | 5pct | ppent_at
+2026-04-10 13:50:28,525  INFO      Progress: 9450 done, 241 errors
+2026-04-10 13:57:17,868  INFO      Progress: 9500 done, 241 errors
+2026-04-10 13:59:36,606  WARNING  ERROR: NMAR|5pct|ppent_at|Iter|15: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 14:01:48,034  INFO      Progress: 9550 done, 242 errors
+2026-04-10 14:06:03,081  WARNING  ERROR: NMAR|5pct|ppent_at|LD|22: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 14:10:35,150  INFO      Progress: 9600 done, 243 errors
+2026-04-10 14:15:43,883  INFO    NMAR | 5pct | state_inc_growth
+2026-04-10 14:18:29,417  WARNING  ERROR: NMAR|5pct|state_inc_growth|LD|2: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 14:19:54,851  INFO      Progress: 9650 done, 244 errors
+2026-04-10 14:27:03,535  WARNING  ERROR: NMAR|5pct|state_inc_growth|RF|8: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 14:30:27,057  INFO      Progress: 9700 done, 245 errors
+2026-04-10 14:31:29,594  WARNING  ERROR: NMAR|5pct|state_inc_growth|Iter|11: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 14:34:08,537  WARNING  ERROR: NMAR|5pct|state_inc_growth|Iter|13: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 14:40:47,916  INFO      Progress: 9750 done, 247 errors
+2026-04-10 14:47:27,922  WARNING  ERROR: NMAR|5pct|state_inc_growth|DL|22: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 14:50:39,228  INFO      Progress: 9800 done, 248 errors
+2026-04-10 14:52:11,820  WARNING  ERROR: NMAR|5pct|state_inc_growth|LD|26: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 14:58:12,140  INFO    NMAR | 10pct | ln_at_adj
+2026-04-10 15:01:06,852  INFO      Progress: 9850 done, 249 errors
+2026-04-10 15:10:54,877  INFO      Progress: 9900 done, 249 errors
+2026-04-10 15:22:10,805  INFO      Progress: 9950 done, 249 errors
+2026-04-10 15:22:11,742  WARNING  ERROR: NMAR|10pct|ln_at_adj|LD|17: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 15:30:19,087  WARNING  ERROR: NMAR|10pct|ln_at_adj|LD|23: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 15:31:20,059  INFO      Progress: 10000 done, 251 errors
+2026-04-10 15:34:25,621  WARNING  ERROR: NMAR|10pct|ln_at_adj|RF|29: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 15:35:24,279  INFO    NMAR | 10pct | ppent_at
+2026-04-10 15:36:33,316  INFO      Progress: 10050 done, 252 errors
+2026-04-10 15:41:33,385  WARNING  ERROR: NMAR|10pct|ppent_at|Iter|5: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 15:46:57,367  INFO      Progress: 10100 done, 253 errors
+2026-04-10 15:51:52,772  WARNING  ERROR: NMAR|10pct|ppent_at|LD|14: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 15:53:09,806  INFO      Progress: 10150 done, 254 errors
+2026-04-10 15:57:24,812  WARNING  ERROR: NMAR|10pct|ppent_at|LD|23: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 15:57:27,082  INFO      Progress: 10200 done, 255 errors
+2026-04-10 15:57:56,453  WARNING  ERROR: NMAR|10pct|ppent_at|Iter|24: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 16:00:03,780  WARNING  ERROR: NMAR|10pct|ppent_at|Iter|27: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 16:04:53,995  INFO    NMAR | 10pct | state_inc_growth
+2026-04-10 16:05:57,508  INFO      Progress: 10250 done, 257 errors
+2026-04-10 16:14:58,693  WARNING  ERROR: NMAR|10pct|state_inc_growth|LD|8: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 16:14:59,710  INFO      Progress: 10300 done, 258 errors
+2026-04-10 16:24:21,784  INFO      Progress: 10350 done, 258 errors
+2026-04-10 17:02:36,078  WARNING  ERROR: NMAR|10pct|state_inc_growth|Reg|20: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 17:03:35,447  INFO      Progress: 10400 done, 259 errors
+2026-04-10 17:06:56,885  WARNING  ERROR: NMAR|10pct|state_inc_growth|Iter|29: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 17:07:22,457  INFO      Progress: 10450 done, 260 errors
+2026-04-10 17:07:22,458  INFO    NMAR | 20pct | ln_at_adj
+2026-04-10 17:11:10,063  INFO      Progress: 10500 done, 260 errors
+2026-04-10 17:15:17,019  INFO      Progress: 10550 done, 260 errors
+2026-04-10 17:18:00,904  WARNING  ERROR: NMAR|20pct|ln_at_adj|Iter|18: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 17:19:39,504  INFO      Progress: 10600 done, 261 errors
+2026-04-10 17:22:36,175  WARNING  ERROR: NMAR|20pct|ln_at_adj|Iter|26: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 17:22:51,817  WARNING  ERROR: NMAR|20pct|ln_at_adj|DL|26: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 17:24:29,884  INFO      Progress: 10650 done, 263 errors
+2026-04-10 17:24:32,451  WARNING  ERROR: NMAR|20pct|ln_at_adj|Iter|29: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 17:25:02,198  INFO    NMAR | 20pct | ppent_at
+2026-04-10 17:28:47,930  INFO      Progress: 10700 done, 264 errors
+2026-04-10 17:32:35,506  INFO      Progress: 10750 done, 264 errors
+2026-04-10 17:36:13,336  INFO      Progress: 10800 done, 264 errors
+2026-04-10 17:37:11,341  WARNING  ERROR: NMAR|20pct|ppent_at|LD|21: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 17:39:56,927  INFO      Progress: 10850 done, 265 errors
+2026-04-10 17:40:46,603  INFO    NMAR | 20pct | state_inc_growth
+2026-04-10 17:40:48,617  WARNING  ERROR: NMAR|20pct|state_inc_growth|Iter|0: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 17:43:17,122  INFO      Progress: 10900 done, 266 errors
+2026-04-10 17:47:20,294  WARNING  ERROR: NMAR|20pct|state_inc_growth|DL|10: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 17:47:26,221  WARNING  ERROR: NMAR|20pct|state_inc_growth|Iter|11: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 17:47:46,871  INFO      Progress: 10950 done, 268 errors
+2026-04-10 17:50:29,847  WARNING  ERROR: NMAR|20pct|state_inc_growth|RF|19: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 17:50:47,156  INFO      Progress: 11000 done, 269 errors
+2026-04-10 17:51:56,771  WARNING  ERROR: NMAR|20pct|state_inc_growth|RF|23: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 17:52:19,878  WARNING  ERROR: NMAR|20pct|state_inc_growth|Reg|24: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 17:53:51,127  INFO      Progress: 11050 done, 271 errors
+2026-04-10 17:55:25,388  INFO    NMAR | 30pct | ln_at_adj
+2026-04-10 17:55:49,214  WARNING  ERROR: NMAR|30pct|ln_at_adj|Iter|1: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 17:57:50,586  INFO      Progress: 11100 done, 272 errors
+2026-04-10 18:01:59,948  INFO      Progress: 11150 done, 272 errors
+2026-04-10 18:04:52,182  WARNING  ERROR: NMAR|30pct|ln_at_adj|DL|13: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 18:11:43,703  INFO      Progress: 11200 done, 273 errors
+2026-04-10 18:20:20,969  INFO      Progress: 11250 done, 273 errors
+2026-04-10 18:22:47,777  WARNING  ERROR: NMAR|30pct|ln_at_adj|RF|28: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 18:24:54,126  INFO    NMAR | 30pct | ppent_at
+2026-04-10 18:28:50,446  INFO      Progress: 11300 done, 274 errors
+2026-04-10 18:32:12,142  WARNING  ERROR: NMAR|30pct|ppent_at|LD|6: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 18:37:58,797  INFO      Progress: 11350 done, 275 errors
+2026-04-10 18:42:42,576  WARNING  ERROR: NMAR|30pct|ppent_at|Iter|14: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 18:45:03,422  INFO      Progress: 11400 done, 276 errors
+2026-04-10 18:47:04,966  WARNING  ERROR: NMAR|30pct|ppent_at|Iter|20: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 19:51:08,277  INFO      Progress: 11450 done, 277 errors
+2026-04-10 19:51:10,803  WARNING  ERROR: NMAR|30pct|ppent_at|Iter|25: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 19:55:41,763  INFO    NMAR | 30pct | state_inc_growth
+2026-04-10 19:56:18,547  WARNING  ERROR: NMAR|30pct|state_inc_growth|Reg|1: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 19:56:52,253  INFO      Progress: 11500 done, 279 errors
+2026-04-10 20:00:00,413  WARNING  ERROR: NMAR|30pct|state_inc_growth|Reg|8: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 20:00:31,884  WARNING  ERROR: NMAR|30pct|state_inc_growth|Iter|9: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 20:01:01,091  INFO      Progress: 11550 done, 281 errors
+2026-04-10 20:04:18,899  WARNING  ERROR: NMAR|30pct|state_inc_growth|Mean|16: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 20:04:53,858  INFO      Progress: 11600 done, 282 errors
+2026-04-10 20:10:04,842  WARNING  ERROR: NMAR|30pct|state_inc_growth|LD|23: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 20:10:08,269  WARNING  ERROR: NMAR|30pct|state_inc_growth|Iter|23: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 20:12:46,858  INFO      Progress: 11650 done, 284 errors
+2026-04-10 20:13:04,791  WARNING  ERROR: NMAR|30pct|state_inc_growth|Iter|25: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 20:20:54,300  INFO    NMAR | 40pct | ln_at_adj
+2026-04-10 20:21:00,006  WARNING  ERROR: NMAR|40pct|ln_at_adj|Iter|0: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 20:23:08,838  INFO      Progress: 11700 done, 286 errors
+2026-04-10 20:25:03,942  WARNING  ERROR: NMAR|40pct|ln_at_adj|Iter|4: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 20:31:35,007  INFO      Progress: 11750 done, 287 errors
+2026-04-10 20:36:12,621  WARNING  ERROR: NMAR|40pct|ln_at_adj|Mean|13: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 20:39:31,097  WARNING  ERROR: NMAR|40pct|ln_at_adj|Iter|16: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 20:40:30,611  INFO      Progress: 11800 done, 289 errors
+2026-04-10 20:41:44,614  WARNING  ERROR: NMAR|40pct|ln_at_adj|Reg|18: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 20:49:16,716  INFO      Progress: 11850 done, 290 errors
+2026-04-10 20:52:30,532  WARNING  ERROR: NMAR|40pct|ln_at_adj|LD|27: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 20:56:11,239  INFO    NMAR | 40pct | ppent_at
+2026-04-10 20:57:13,012  INFO      Progress: 11900 done, 291 errors
+2026-04-10 20:59:22,397  WARNING  ERROR: NMAR|40pct|ppent_at|Iter|3: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 21:03:47,284  WARNING  ERROR: NMAR|40pct|ppent_at|Iter|7: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 21:05:36,042  INFO      Progress: 11950 done, 293 errors
+2026-04-10 21:14:14,086  INFO      Progress: 12000 done, 293 errors
+2026-04-10 21:22:09,498  INFO      Progress: 12050 done, 293 errors
+2026-04-10 21:30:18,985  INFO    NMAR | 40pct | state_inc_growth
+2026-04-10 21:30:19,946  WARNING  ERROR: NMAR|40pct|state_inc_growth|LD|0: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 21:30:24,440  INFO      Progress: 12100 done, 294 errors
+2026-04-10 21:39:20,159  INFO      Progress: 12150 done, 294 errors
+2026-04-10 21:41:27,941  WARNING  ERROR: NMAR|40pct|state_inc_growth|Iter|9: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 21:44:55,663  WARNING  ERROR: NMAR|40pct|state_inc_growth|Iter|12: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 21:48:11,071  INFO      Progress: 12200 done, 296 errors
+2026-04-10 21:51:43,375  WARNING  ERROR: NMAR|40pct|state_inc_growth|Reg|18: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 21:53:03,542  WARNING  ERROR: NMAR|40pct|state_inc_growth|Reg|19: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 21:54:21,738  WARNING  ERROR: NMAR|40pct|state_inc_growth|Iter|20: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 21:56:45,974  INFO      Progress: 12250 done, 299 errors
+2026-04-10 21:57:48,782  WARNING  ERROR: NMAR|40pct|state_inc_growth|LD|23: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 22:01:36,382  WARNING  ERROR: NMAR|40pct|state_inc_growth|Reg|26: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 22:06:07,063  INFO    NMAR | 50pct | ln_at_adj
+2026-04-10 22:06:07,960  INFO      Progress: 12300 done, 301 errors
+2026-04-10 22:13:54,323  INFO      Progress: 12350 done, 301 errors
+2026-04-10 22:15:03,066  WARNING  ERROR: NMAR|50pct|ln_at_adj|Reg|8: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 22:22:36,772  INFO      Progress: 12400 done, 302 errors
+2026-04-10 22:23:48,347  WARNING  ERROR: NMAR|50pct|ln_at_adj|RF|15: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 22:25:57,913  WARNING  ERROR: NMAR|50pct|ln_at_adj|Reg|17: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 22:31:55,341  INFO      Progress: 12450 done, 304 errors
+2026-04-10 22:33:22,083  WARNING  ERROR: NMAR|50pct|ln_at_adj|Iter|23: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 22:40:08,689  INFO      Progress: 12500 done, 305 errors
+2026-04-10 22:41:22,559  INFO    NMAR | 50pct | ppent_at
+2026-04-10 22:48:10,450  INFO      Progress: 12550 done, 305 errors
+2026-04-10 22:48:13,914  WARNING  ERROR: NMAR|50pct|ppent_at|Iter|6: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 22:56:12,325  INFO      Progress: 12600 done, 306 errors
+2026-04-10 22:57:14,210  WARNING  ERROR: NMAR|50pct|ppent_at|Iter|14: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 23:00:15,317  WARNING  ERROR: NMAR|50pct|ppent_at|Iter|17: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 23:04:26,959  INFO      Progress: 12650 done, 308 errors
+2026-04-10 23:10:33,247  WARNING  ERROR: NMAR|50pct|ppent_at|Iter|26: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 23:12:36,581  WARNING  ERROR: NMAR|50pct|ppent_at|LD|28: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 23:12:43,014  INFO      Progress: 12700 done, 310 errors
+2026-04-10 23:14:50,740  INFO    NMAR | 50pct | state_inc_growth
+2026-04-10 23:15:50,531  WARNING  ERROR: NMAR|50pct|state_inc_growth|LD|1: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 23:20:21,879  WARNING  ERROR: NMAR|50pct|state_inc_growth|LD|5: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 23:21:31,773  INFO      Progress: 12750 done, 312 errors
+2026-04-10 23:24:35,293  WARNING  ERROR: NMAR|50pct|state_inc_growth|Iter|9: A singular matrix detected: slice(s) [0] are singular.
+2026-04-10 23:29:14,321  INFO      Progress: 12800 done, 313 errors
+2026-04-10 23:37:18,297  INFO      Progress: 12850 done, 313 errors
+2026-04-10 23:45:22,938  INFO      Progress: 12900 done, 313 errors
+2026-04-10 23:49:03,402  INFO  Simulation complete: 12917 done, 313 errors
+2026-04-10 23:49:03,411  INFO  Computing NMAR diagnostics...
+2026-04-10 23:49:24,198  INFO  Writing Excel workbook to C:\Users\briac\Econ_Code\Oxford_MonteCarlo_week3\paper_analysis_output\Paper_0019_AntidiscrimLaws\full_run\AntidiscrimLawsReport_0019.xlsx ...
+2026-04-10 23:49:42,516  INFO  Workbook written: C:\Users\briac\Econ_Code\Oxford_MonteCarlo_week3\paper_analysis_output\Paper_0019_AntidiscrimLaws\full_run\AntidiscrimLawsReport_0019.xlsx
+2026-04-10 23:49:42,549  INFO  Full simulation complete.

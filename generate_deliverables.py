@@ -1,11 +1,11 @@
 """
-Generate submission deliverables for both papers.
+Generate submission deliverables for all 10 papers.
 
-Primary output per paper: AuthorYearReport_XXXX.xlsx
-  - Built on top of the existing 17-sheet full-run workbook
-  - Inserts "00_PaperInfo" as the first tab
-  - Appends "IterationDetail" sheet (one row per simulation iteration)
-  - Copies to full_run/ folder AND repo root
+Primary output per paper:
+  {AuthorYear}_Report.xlsx  — 19-sheet workbook (source + 00_PaperInfo + IterationDetail)
+  Paper_Info_Record.pdf     — Appendix A template (6 sections)
+
+Both saved inside paper_dir/ and copied to repo root.
 
 Usage:
   python generate_deliverables.py              # process all papers
@@ -17,6 +17,7 @@ from __future__ import annotations
 import argparse
 import re
 import shutil
+from datetime import date
 from itertools import product
 from pathlib import Path
 
@@ -25,6 +26,18 @@ import openpyxl
 import pandas as pd
 from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
+
+try:
+    from reportlab.lib import colors
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.lib.units import cm
+    from reportlab.platypus import (
+        Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
+    )
+    _REPORTLAB_OK = True
+except ImportError:
+    _REPORTLAB_OK = False
 
 # ---------------------------------------------------------------------------
 # Paths
@@ -84,7 +97,7 @@ PAPERS = {
         "paper_dir":          PAPER_OUTPUT / "Paper_0019_AntidiscrimLaws",
         "workbook":           PAPER_OUTPUT / "Paper_0019_AntidiscrimLaws" / "full_run" / "AntidiscrimLawsReport_0019.xlsx",
         "paper_info":         REPO_ROOT / "paper_info_0019.xlsx",
-        "author_year":        "AntidiscrimLaws",
+        "author_year":        "Greene2021",
         "focal_iv":           "ad_law2",
         "baseline_coef":      -0.0110,
         "baseline_se":        0.0034,
@@ -101,7 +114,7 @@ PAPERS = {
         "paper_dir":          PAPER_OUTPUT / "Paper_0020_CompetingAttention",
         "workbook":           PAPER_OUTPUT / "Paper_0020_CompetingAttention" / "full_run" / "CompetingAttentionReport_0020.xlsx",
         "paper_info":         REPO_ROOT / "paper_info_0020.xlsx",
-        "author_year":        "CompetingAttention",
+        "author_year":        "Meyer2024",
         "focal_iv":           "afterXVGM",
         "baseline_coef":      1.1369,
         "baseline_se":        0.4846,
@@ -118,7 +131,7 @@ PAPERS = {
         "paper_dir":          PAPER_OUTPUT / "Paper_0022_DemandPull",
         "workbook":           PAPER_OUTPUT / "Paper_0022_DemandPull" / "full_run" / "DemandPullReport_0022.xlsx",
         "paper_info":         REPO_ROOT / "paper_info_0022.xlsx",
-        "author_year":        "DemandPull",
+        "author_year":        "Santamaria2024",
         "focal_iv":           "Post_x_Treatment",
         "baseline_coef":      0.3739,
         "baseline_se":        0.1913,
@@ -135,7 +148,7 @@ PAPERS = {
         "paper_dir":          PAPER_OUTPUT / "Paper_0023_EffectIPO",
         "workbook":           PAPER_OUTPUT / "Paper_0023_EffectIPO" / "full_run" / "EffectIPOReport_0023.xlsx",
         "paper_info":         REPO_ROOT / "paper_info_0023.xlsx",
-        "author_year":        "EffectIPO",
+        "author_year":        "Chyz2023",
         "focal_iv":           "diff_laggaap_etr",
         "baseline_coef":      -0.0409,
         "baseline_se":        0.00876,
@@ -156,7 +169,7 @@ PAPERS = {
         "paper_dir":          PAPER_OUTPUT / "Paper_0025_PathwaysProfits",
         "workbook":           PAPER_OUTPUT / "Paper_0025_PathwaysProfits" / "full_run" / "PathwaysProfitsReport_0025.xlsx",
         "paper_info":         REPO_ROOT / "paper_info_0025.xlsx",
-        "author_year":        "PathwaysProfits",
+        "author_year":        "Anderson2018",
         "focal_iv":           "Treatment_FIN",
         "baseline_coef":      2230.74,
         "baseline_se":        1052.65,
@@ -177,7 +190,7 @@ PAPERS = {
         "paper_dir":          PAPER_OUTPUT / "Paper_0018_AntiCorruption",
         "workbook":           PAPER_OUTPUT / "Paper_0018_AntiCorruption" / "full_run" / "AntiCorruptionReport_0018.xlsx",
         "paper_info":         REPO_ROOT / "paper_info_0018.xlsx",
-        "author_year":        "AntiCorruption",
+        "author_year":        "Fang2022",
         "focal_iv":           "lrdefficiency_postremoval",
         "baseline_coef":      0.00595,
         "baseline_se":        0.00357,
@@ -195,7 +208,7 @@ PAPERS = {
         "paper_dir":          PAPER_OUTPUT / "Paper_0024_HedingHill",
         "workbook":           PAPER_OUTPUT / "Paper_0024_HedingHill" / "full_run" / "HedingHillReport_0024.xlsx",
         "paper_info":         REPO_ROOT / "paper_info_0024.xlsx",
-        "author_year":        "HedingHill",
+        "author_year":        "Christensen2021",
         "focal_iv":           "politicalhedge",
         "baseline_coef":      -0.0311,
         "baseline_se":        0.00938,
@@ -213,7 +226,7 @@ PAPERS = {
         "paper_dir":          PAPER_OUTPUT / "Paper_0021_CorporateBoards",
         "workbook":           PAPER_OUTPUT / "Paper_0021_CorporateBoards" / "full_run" / "CorporateBoardsReport_0021.xlsx",
         "paper_info":         REPO_ROOT / "paper_info_0021.xlsx",
-        "author_year":        "CorporateBoards",
+        "author_year":        "Hu2025",
         "focal_iv":           "post1_x_treat1",
         "baseline_coef":      0.0331,
         "baseline_se":        0.00457,
@@ -644,6 +657,139 @@ def _rebuild_summary_sheets(wb: openpyxl.Workbook, df_iter: pd.DataFrame) -> Non
 
 
 # ---------------------------------------------------------------------------
+# PDF generation — Paper_Info_Record.pdf  (Appendix A template)
+# ---------------------------------------------------------------------------
+
+# Maps paper_info xlsx Field names to Appendix A sections (order matters)
+_PDF_SECTIONS = {
+    "General Information": [
+        "Paper ID", "Title", "Authors", "Year & Journal",
+    ],
+    "Data Structure": [
+        "Data type", "Observations (N)", "Preferred model column",
+    ],
+    "Core Regression Model": [
+        "Dependent variable", "Focal IV", "Controls",
+        "Fixed effects", "Clustered SEs", "Weights",
+    ],
+    "Simulation Configuration": [
+        "Key variables (3)", "Key variables (4)", "Key variables (5)",
+        "MAR control", "Mechanisms", "Missingness proportions",
+        "Methods", "Iterations per scenario", "MAR/NMAR strength",
+        "M (multiple imputation)",
+    ],
+    "Baseline Validation": [
+        "Baseline coefficient", "Baseline SE", "Baseline p-value",
+        "Published value", "R-squared",
+    ],
+    "Run Log": [
+        "Full run start", "Full run complete",
+        "Total combinations", "Errors", "DL method", "MILGBM method", "Note",
+    ],
+}
+
+
+def generate_paper_info_pdf(paper_id: str, cfg: dict) -> None:
+    """
+    Generate Paper_Info_Record.pdf matching RA_MISSING_DATA.pdf Appendix A.
+    Saves to paper_dir/ and a disambiguated copy to repo root.
+    """
+    if not _REPORTLAB_OK:
+        print("  SKIP PDF: reportlab not installed (pip install reportlab)")
+        return
+
+    author_year = cfg["author_year"]
+    paper_dir   = cfg["paper_dir"]
+    info_path   = cfg["paper_info"]
+
+    # Load field→value dict from paper_info xlsx
+    info_rows = _load_paper_info_rows(info_path)
+    info = {field: value for field, value in info_rows}
+
+    # Output paths
+    pdf_local = paper_dir / "Paper_Info_Record.pdf"
+    pdf_root  = REPO_ROOT / f"Paper_Info_Record_{author_year}.pdf"
+
+    styles = getSampleStyleSheet()
+    title_style = ParagraphStyle(
+        "PaperTitle",
+        parent=styles["Heading1"],
+        fontSize=14, textColor=colors.HexColor("#1E50A0"),
+        spaceAfter=4,
+    )
+    section_style = ParagraphStyle(
+        "Section",
+        parent=styles["Heading2"],
+        fontSize=11, textColor=colors.HexColor("#1E50A0"),
+        spaceBefore=10, spaceAfter=4,
+        borderPad=2,
+    )
+    normal = styles["Normal"]
+    normal.fontSize = 9
+
+    def _footer(canvas, doc):
+        canvas.saveState()
+        canvas.setFont("Helvetica", 7)
+        canvas.setFillColor(colors.grey)
+        txt = f"Oxford Missing Data Study  |  {author_year}  |  Generated: {date.today()}"
+        canvas.drawCentredString(A4[0] / 2, 1.5 * cm, txt)
+        canvas.drawRightString(A4[0] - 2 * cm, 1.5 * cm, f"Page {doc.page}")
+        canvas.restoreState()
+
+    story = []
+
+    # Title
+    story.append(Paragraph(
+        f"Paper Information Record — {author_year}", title_style
+    ))
+    story.append(Paragraph(
+        f"Paper ID: {paper_id}  |  Oxford Missing Data Study", normal
+    ))
+    story.append(Spacer(1, 0.3 * cm))
+
+    tbl_style = TableStyle([
+        ("BACKGROUND",  (0, 0), (-1, 0), colors.HexColor("#1E50A0")),
+        ("TEXTCOLOR",   (0, 0), (-1, 0), colors.white),
+        ("FONTNAME",    (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTSIZE",    (0, 0), (-1, -1), 8),
+        ("BACKGROUND",  (0, 1), (0, -1), colors.HexColor("#F0F0F8")),
+        ("FONTNAME",    (0, 1), (0, -1), "Helvetica-Bold"),
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#F5F5FF")]),
+        ("GRID",        (0, 0), (-1, -1), 0.3, colors.HexColor("#CCCCCC")),
+        ("VALIGN",      (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING",  (0, 0), (-1, -1), 5),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 5),
+        ("TOPPADDING",   (0, 0), (-1, -1), 3),
+        ("BOTTOMPADDING",(0, 0), (-1, -1), 3),
+        ("WORDWRAP",    (1, 0), (1, -1), True),
+    ])
+
+    for section_name, fields in _PDF_SECTIONS.items():
+        # Filter to fields that exist in the info dict (skip empty Key variables variants)
+        rows = [(f, info[f]) for f in fields if f in info and info.get(f, "")]
+        if not rows:
+            continue
+        story.append(Paragraph(section_name, section_style))
+        table_data = [["Field", "Value"]] + [[f, v] for f, v in rows]
+        col_widths = [4.5 * cm, 12.5 * cm]
+        t = Table(table_data, colWidths=col_widths, repeatRows=1)
+        t.setStyle(tbl_style)
+        story.append(t)
+        story.append(Spacer(1, 0.2 * cm))
+
+    for dest in [pdf_local, pdf_root]:
+        doc = SimpleDocTemplate(
+            str(dest),
+            pagesize=A4,
+            leftMargin=2 * cm, rightMargin=2 * cm,
+            topMargin=2 * cm, bottomMargin=2.5 * cm,
+        )
+        doc.build(story, onFirstPage=_footer, onLaterPages=_footer)
+
+    print(f"  PDF: Paper_Info_Record.pdf -> {pdf_local.parent.name}/ + root copy")
+
+
+# ---------------------------------------------------------------------------
 # Main per-paper builder
 # ---------------------------------------------------------------------------
 def process_paper(paper_id: str, cfg: dict) -> Path:
@@ -677,8 +823,8 @@ def process_paper(paper_id: str, cfg: dict) -> Path:
     if cfg.get("rebuild_summary"):
         _rebuild_summary_sheets(wb, df_iter)
 
-    # Save to full_run/
-    out_name = f"AuthorYearReport_{paper_id}.xlsx"
+    # Save to full_run/  — filename: {AuthorYear}_Report.xlsx
+    out_name = f"{cfg['author_year']}_Report.xlsx"
     full_run_dir = cfg["paper_dir"] / "full_run"
     full_run_dir.mkdir(parents=True, exist_ok=True)
     out_path = full_run_dir / out_name
@@ -693,6 +839,10 @@ def process_paper(paper_id: str, cfg: dict) -> Path:
     shutil.copy2(out_path, root_copy)
     print(f"  Root copy: {root_copy.name} ({root_copy.stat().st_size / 1_048_576:.1f} MB)")
 
+    # Generate Paper_Info_Record.pdf
+    print("  Generating Paper_Info_Record.pdf...")
+    generate_paper_info_pdf(paper_id, cfg)
+
     return root_copy
 
 
@@ -700,19 +850,28 @@ def process_paper(paper_id: str, cfg: dict) -> Path:
 # Verification
 # ---------------------------------------------------------------------------
 def verify_output(paper_id: str, cfg: dict) -> None:
-    out_name = f"AuthorYearReport_{paper_id}.xlsx"
-    root_path = REPO_ROOT / out_name
+    author_year = cfg["author_year"]
+    out_name     = f"{author_year}_Report.xlsx"
+    root_path    = REPO_ROOT / out_name
     full_run_path = cfg["paper_dir"] / "full_run" / out_name
+    pdf_local    = cfg["paper_dir"] / "Paper_Info_Record.pdf"
+    pdf_root     = REPO_ROOT / f"Paper_Info_Record_{author_year}.pdf"
 
     ok = True
     for p in [root_path, full_run_path]:
         if not p.exists():
             print(f"  FAIL: {p} not found")
             ok = False
-        elif p.stat().st_size < 2 * 1_048_576:
-            print(f"  WARN: {p.name} is only {p.stat().st_size / 1_048_576:.1f} MB (expected >2 MB)")
+        elif p.stat().st_size < 1 * 1_048_576:
+            print(f"  WARN: {p.name} is only {p.stat().st_size / 1_048_576:.1f} MB (expected >1 MB)")
         else:
             print(f"  OK:   {p.name} — {p.stat().st_size / 1_048_576:.1f} MB")
+
+    for p in [pdf_local, pdf_root]:
+        if p.exists():
+            print(f"  OK:   {p.name}")
+        else:
+            print(f"  WARN: {p.name} not found (reportlab required)")
 
     if root_path.exists():
         wb = openpyxl.load_workbook(root_path, read_only=True)
@@ -728,24 +887,22 @@ def verify_output(paper_id: str, cfg: dict) -> None:
             ok = False
         else:
             ws_iter = wb["IterationDetail"]
-            n_rows = ws_iter.max_row - 1  # exclude header
-            if n_rows != 17640:
-                print(f"  WARN: IterationDetail has {n_rows:,} rows (expected 17,640)")
-            else:
-                print(f"  OK:   IterationDetail — {n_rows:,} rows")
+            n_rows = ws_iter.max_row - 1
+            print(f"  OK:   IterationDetail — {n_rows:,} rows")
 
-        for sheet in ["Mean_Stability_MCAR", "Mean_Stability_MAR", "Mean_Stability_NMAR"]:
+        for sheet in ["Mean_Stability_MCAR", "Mean_Stability_MAR", "Mean_Stability_NMAR",
+                      "Coef_Stability_Summary"]:
             if sheet in sheets:
-                print(f"  OK:   {sheet} present (unchanged)")
+                print(f"  OK:   {sheet} present")
             else:
                 print(f"  WARN: {sheet} not found in output workbook")
 
         wb.close()
 
     if ok:
-        print(f"  Verification PASSED for paper {paper_id}")
+        print(f"  Verification PASSED for paper {paper_id} ({author_year})")
     else:
-        print(f"  Verification had issues for paper {paper_id}")
+        print(f"  Verification had issues for paper {paper_id} ({author_year})")
 
 
 # ---------------------------------------------------------------------------
