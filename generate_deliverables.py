@@ -191,6 +191,24 @@ PAPERS = {
         "txt_has_data": True,
         # Source workbook is complete (single uninterrupted session) — no rebuild needed.
     },
+    "0024": {
+        "paper_dir":          PAPER_OUTPUT / "Paper_0024_HedingHill",
+        "workbook":           PAPER_OUTPUT / "Paper_0024_HedingHill" / "full_run" / "HedingHillReport_0024.xlsx",
+        "paper_info":         REPO_ROOT / "paper_info_0024.xlsx",
+        "author_year":        "HedingHill",
+        "focal_iv":           "politicalhedge",
+        "baseline_coef":      -0.0311,
+        "baseline_se":        0.00938,
+        "baseline_pval":      0.000933,
+        "regression_outputs": PAPER_OUTPUT / "Paper_0024_HedingHill" / "regression_outputs",
+        "key_vars":           ["mktvol", "beta", "btm", "competition"],
+        "mechanisms":   ["MCAR", "MAR", "NMAR"],
+        "pct_strings":  ["1pct", "5pct", "10pct", "20pct", "30pct", "40pct", "50pct"],
+        "methods":      ["LD", "Mean", "Reg", "Iter", "RF", "DL", "MILGBM"],
+        "n_iters":      30,
+        "txt_has_data": True,
+        # Source workbook complete (single uninterrupted session) — no rebuild needed.
+    },
     "0021": {
         "paper_dir":          PAPER_OUTPUT / "Paper_0021_CorporateBoards",
         "workbook":           PAPER_OUTPUT / "Paper_0021_CorporateBoards" / "full_run" / "CorporateBoardsReport_0021.xlsx",
