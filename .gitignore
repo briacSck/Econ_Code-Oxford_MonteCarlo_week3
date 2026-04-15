@@ -21,11 +21,21 @@ env/
 .DS_Store
 Thumbs.db
 
-# Monte Carlo generated outputs
+# Monte Carlo generated log files (not deliverables)
 **/simulation*.log
 **/*progress.log
+**/*_stdout*.log
+**/full.log
+**/smoke.log
+**/full_rerun.log
+
+# Raw proprietary data formats (not committed)
+*.dta
 
 # Optional local scratch
 tmp/
 temp/
 scratch/
+
+# Deliverables are NOT excluded:
+# *.xlsx, *.pdf, *.py, *.sh, *.md, *.txt, requirements.txt, DATA.csv

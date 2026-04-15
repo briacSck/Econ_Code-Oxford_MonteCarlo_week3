@@ -1,177 +1,132 @@
-# Oxford Monte Carlo — Missing Data Imputation Robustness Study
+# Oxford Missing Data Study — Monte Carlo Simulation
 
-Monte Carlo simulation framework evaluating the robustness of regression findings in
-published economics papers under artificial missingness. For each paper, the framework
-introduces missing data across three mechanisms (MCAR, MAR, NMAR) at seven severity
-levels (1–50%), applies seven imputation methods to each incomplete dataset,
-re-estimates the paper's preferred regression specification, and tracks coefficient
-stability across 30 iterations per cell.
+This repository contains a Monte Carlo simulation study evaluating how seven missing-data imputation methods affect core regression conclusions across ten published management papers. For each paper, artificial missingness is introduced into key control variables, seven imputation methods are applied, the original regression is re-estimated, and coefficient stability is tracked across 30 iterations per cell.
 
-**Primary metric:** fraction of iterations in which the focal coefficient preserves
-both its sign and statistical significance relative to the complete-data baseline
-("Both Same", B).
+**Research question:** When data contain varying missingness under different mechanisms (MCAR, MAR, NMAR), do different imputation strategies alter a study's core regression conclusions — sign, magnitude, or significance?
 
 ---
 
 ## Repository Structure
 
 ```
-Oxford_MonteCarlo/
-├── RA_MISSING_DATA.pdf                        # Operations manual (full protocol, 18 pp)
-├── requirements.txt                           # Python dependencies
-├── generate_figures.py                        # Generates 3 publication-quality figures per paper
-├── generate_deliverables.py                   # Generates PDFs, paper_info.xlsx, regression_results.xlsx
+.
+├── generate_deliverables.py      # Produces AuthorYear_Report.xlsx + Paper_Info_Record.pdf for all papers
+├── generate_figures.py           # Publication-quality stability figures (3 per paper)
+├── qc_audit.py                   # Automated QC verification (all 10 QC items per manual Table 6)
+├── requirements.txt              # Python dependencies
+├── RA_MISSING_DATA.pdf           # Operations manual v2.0 (authoritative specification)
+├── qc_audit_results.csv          # QC audit output (all 10 papers x 10 checks)
 │
-├── paper_info_0005.xlsx                       # Root copy: Paper 0005 information record
-├── paper_info_0017.xlsx                       # Root copy: Paper 0017 information record
-├── regression_results_0005.xlsx               # Root copy: Paper 0005 regression results
-├── regression_results_0017.xlsx               # Root copy: Paper 0017 regression results
-├── Paper_Info_Record_0005.pdf                 # Root copy: Paper 0005 PDF info record
-├── Paper_Info_Record_0017.pdf                 # Root copy: Paper 0017 PDF info record
+├── paper_info_{id}.xlsx          # Input metadata for each paper (10 files, ids 0005-0025)
 │
-├── source_artifacts/                          # Original paper source files (read-only archive)
-│   ├── mapping_entrepreneurial_inclusion.dta  # Paper 0005 Stata dataset
-│   ├── mapping_entrepreneurial_inclusion.do   # Paper 0005 Stata replication code
-│   ├── movie_data.csv                         # Paper 0017 original dataset
-│   ├── movies.R                               # Paper 0017 R replication code
-│   └── ...                                    # Published PDFs, demand-pull paper files
+├── {AuthorYear}_Report.xlsx      # Root-level copies of main simulation workbooks (10 files)
+├── Paper_Info_Record_{AuthorYear}.pdf  # Root-level copies of Paper Info Records (10 files)
+│
+├── scripts/
+│   └── run_paper.sh              # Runs baseline -> smoke -> full simulation for a single paper
 │
 └── paper_analysis_output/
-    ├── Paper_0005_MappingEntrepreneurial/
-    │   ├── DATA.csv                           # Pre-processed analysis dataset (32,647 obs)
-    │   ├── Paper_Info_Record.txt              # Metadata, baseline validation, QC log
-    │   ├── Paper_Info_Record.pdf              # PDF version
-    │   ├── confignotes.txt                    # Model spec, estimator decisions, key vars
-    │   ├── scripts/
-    │   │   └── simulation_0005.py             # Main simulation script
-    │   ├── logs/                              # Run logs (gitignored progress logs)
-    │   ├── smoke/                             # Smoke-test workbooks
-    │   ├── full_run/                          # Final report workbooks + exports
-    │   │   ├── Stroube2025Report_0005.xlsx    # Final workbook (17 sheets, QC passed)
-    │   │   ├── paper_info_0005.xlsx           # Structured information record
-    │   │   ├── regression_results_0005.xlsx   # Baseline + simulation summary
-    │   │   └── figures/                       # Publication-quality visualizations
-    │   │       ├── fig1_stability_heatmap_paper0005.png
-    │   │       ├── fig2_method_comparison_paper0005.png
-    │   │       └── fig3_stability_trajectory_paper0005.png
-    │   └── regression_outputs/               # Per-iteration regression text outputs
-    │       ├── MCAR/{1pct..50pct}/{var}/{method}/iter{N}_model_{var}.txt
-    │       ├── MAR/
-    │       └── NMAR/
-    │
-    └── Paper_0017_StatusConsensus/
-        ├── DATA.csv                           # Pre-processed analysis dataset (4,012 obs)
-        ├── Paper_Info_Record.txt
-        ├── Paper_Info_Record.pdf
-        ├── confignotes.txt
+    └── Paper_{id}_{ShortName}/   # Per-paper output directory (10 directories)
+        ├── DATA.csv                    # Preprocessed data used in simulation
+        ├── Paper_Info_Record.pdf       # Paper Information Record (Appendix A template)
+        ├── confignotes.txt             # Baseline validation log + setup decisions
         ├── scripts/
-        │   └── simulation_0017.py
-        ├── logs/
-        ├── smoke/
+        │   └── simulation_{id}.py      # Paper-specific simulation script
         ├── full_run/
-        │   ├── Stroube2024Report_0017.xlsx    # Final workbook (17 sheets, QC passed)
-        │   ├── paper_info_0017.xlsx
-        │   ├── regression_results_0017.xlsx
-        │   └── figures/
-        │       ├── fig1_stability_heatmap_paper0017.png
-        │       ├── fig2_method_comparison_paper0017.png
-        │       └── fig3_stability_trajectory_paper0017.png
+        │   ├── {AuthorYear}_Report.xlsx     # Main simulation workbook (19 sheets, Appendix B)
+        │   └── figures/                      # Stability figures (3 PNGs)
         └── regression_outputs/
-            ├── MCAR/
+            ├── MCAR/{1pct..50pct}/{VarName}/{method}/iter{n}_model_{key}.txt
             ├── MAR/
             └── NMAR/
 ```
 
 ---
 
-## Papers Analyzed
+## Completed Papers
 
-| Paper ID | Title | Authors | Journal | Year | Focal IV | Baseline Coef | Status |
-|---|---|---|---|---|---|---|---|
-| 0005 | Mapping Entrepreneurial Inclusion Across US Neighborhoods: The Case of Low-Code E-commerce Entrepreneurship | Stroube & Dushnitsky | SMJ | ~2025 | `log_pop_black_aa` | 0.0307*** | **QC Passed** (2026-04-01) |
-| 0017 | Status and Consensus: Heterogeneity in Audience Evaluations of Female- versus Male-Lead Films | Stroube | SMJ | 2024 | `FLead` | 0.0468*** | **QC Passed** (2026-04-01) |
+| Paper ID | AuthorYear | Short Title | N Runs | Focal IV | Baseline p |
+|----------|-----------|-------------|--------|----------|-----------|
+| 0005 | Stroube2025 | Mapping Entrepreneurial Inclusion (Shopify/ZCTA) | 17,640 | log_pop_black_aa | <0.001*** |
+| 0017 | Stroube2024 | Status and Consensus (Film Ratings) | 17,640 | FLead | <0.001*** |
+| 0018 | Fang2022 | Anti-Corruption, R&D Efficiency, and Subsidies | 13,230 | lrdefficiency_postremoval | 0.096* |
+| 0019 | Greene2021 | Anti-Discrimination Laws and Firm Performance | 13,230 | ad_law2 | 0.001** |
+| 0020 | Meyer2024 | Competing for Attention on Digital Platforms | 13,230 | afterXVGM | 0.020* |
+| 0021 | Hu2025 | Reshaping Corporate Boards (Gender Diversity) | 17,640 | post1_x_treat1 | <0.001*** |
+| 0022 | Santamaria2024 | Demand-Pull vs. Resource-Push Entrepreneurship Training | 13,230 | Post_x_Treatment | 0.052 |
+| 0023 | Chyz2023 | Effect of IPO Firms on Industry Tax Planning | 17,640 | diff_laggaap_etr | <0.001*** |
+| 0024 | Christensen2021 | Hedging on the Hill (Political Hedging) | 17,640 | politicalhedge | <0.001*** |
+| 0025 | Anderson2018 | Pathways to Profits (Marketing vs. Finance Skills) | 17,640 | Treatment_FIN | 0.035* |
 
 ---
 
-## Simulation Protocol
+## Deliverables Per Paper
 
-Full methodology is documented in [`RA_MISSING_DATA.pdf`](RA_MISSING_DATA.pdf), covering:
-missingness mechanism specifications (MCAR, MAR, NMAR), imputation method implementations
-(7 methods), simulation grid defaults, key-variable and MAR-control selection rules,
-baseline replication gate, QC checklist, and output contract.
+Each paper produces two primary deliverables:
 
-**Simulation grid (per paper):**
+**`{AuthorYear}_Report.xlsx`** — 19-sheet simulation workbook (Appendix B):
+- `00_PaperInfo` — paper metadata
+- `Baseline_Descriptives`, `Baseline_Correlations`, `Baseline_Regression`
+- `Mean_Stability_MCAR/MAR/NMAR` — B-proportion and Wilson CIs by method x proportion
+- `Model_Comparison`, `Stats_Features`, `Coef_Stability_Summary`, `Benchmark_Methods`
+- `MI_Diagnostics`, `MI_Trace`, `MI_Overimputation`, `MI_Distribution`
+- `Missingness_Patterns`, `NMAR_Residual`, `NMAR_Delta`
+- `IterationDetail` — one row per simulation iteration (mechanism x proportion x key_var x method x iter) with coef, SE, p-value, sign/significance match flags; full traceability
+
+**`Paper_Info_Record.pdf`** — structured record matching Appendix A template (6 sections: General Information, Data Structure, Core Regression Model, Simulation Configuration, Baseline Validation, Run Log).
+
+---
+
+## Simulation Design
 
 | Parameter | Value |
-|---|---|
+|-----------|-------|
 | Mechanisms | MCAR, MAR, NMAR |
 | Missingness proportions | 1%, 5%, 10%, 20%, 30%, 40%, 50% |
-| Imputation methods | LD, Mean, Reg, Iter, RF, DL, MILGBM |
+| Imputation methods | LD, Mean, Reg, Iter, RF, DL, MI-LGBM |
 | Iterations per cell | 30 |
 | MAR/NMAR strength | 1.5 |
-| MI completed datasets (M) | 5 |
-| Total runs per paper | 17,640 |
+| MI datasets (M) | 5 (Rubin's Rules pooling) |
+| Key variables per paper | 3-4 |
+| Total runs (4 key vars) | 3 x 7 x 4 x 7 x 30 = 17,640 |
+| Total runs (3 key vars) | 3 x 7 x 3 x 7 x 30 = 13,230 |
+
+**Primary metric:** `B_prop` (Both Same) — fraction of iterations where the focal coefficient maintains both its sign and significance level relative to the baseline.
 
 ---
 
-## Reproduction
+## How to Reproduce
 
 ```bash
-# Validate baseline replication only (seconds)
-python "paper_analysis_output/Paper_0005_MappingEntrepreneurial/scripts/simulation_0005.py" --mode baseline
-python "paper_analysis_output/Paper_0017_StatusConsensus/scripts/simulation_0017.py" --mode baseline
+# Install dependencies
+pip install -r requirements.txt
 
-# Smoke test: 2 iterations x reduced missingness levels (~2 minutes)
-python "paper_analysis_output/Paper_0005_MappingEntrepreneurial/scripts/simulation_0005.py" --mode smoke
-python "paper_analysis_output/Paper_0017_StatusConsensus/scripts/simulation_0017.py" --mode smoke
-
-# Full simulation: 30 iterations x all levels (several hours)
-python "paper_analysis_output/Paper_0005_MappingEntrepreneurial/scripts/simulation_0005.py" --mode full
-python "paper_analysis_output/Paper_0017_StatusConsensus/scripts/simulation_0017.py" --mode full
-```
-
-Scripts read source data from `source_artifacts/` (if `DATA.csv` is absent), write
-structured logs to `logs/`, and write the final report workbook to `full_run/`.
-
----
-
-## Key Output Files
-
-Each paper produces a 17-sheet Excel workbook in `full_run/`:
-
-| Sheet group | Contents |
-|---|---|
-| **Baseline** | Replicated coefficient table vs. published values; discrepancy flags |
-| **Stability heatmaps** (x3) | Per-mechanism (MCAR / MAR / NMAR): B and SS fractions across proportion x method |
-| **Coefficient summaries** | Mean estimated coefficient per cell; deviation from baseline |
-| **Model comparison** | Method-level aggregates across all key variables and proportions |
-| **MI diagnostics** | MILGBM-specific: FMI, Relative Efficiency, average Rubin-pooled SE |
-| **QC flags** | Iteration counts, blank-cell detection, sanity check results |
-
-Three publication-quality figures per paper are saved to `full_run/figures/`:
-
-| Figure | Description |
-|---|---|
-| `fig1_stability_heatmap` | B-proportion heatmap (method x missingness level, MCAR mechanism) |
-| `fig2_method_comparison` | Bar chart: mean B-proportion by method across all key variables |
-| `fig3_stability_trajectory` | Line chart: B-proportion vs. missingness level per method (first key variable) |
-
----
-
-## Deliverable Generation
-
-```bash
-# Re-generate PDFs, paper_info.xlsx, regression_results.xlsx for both papers
+# Regenerate all deliverables (xlsx + PDFs) for all 10 papers
 python generate_deliverables.py
 
-# Re-generate all figures (reads from full_run workbooks)
+# Single paper
+python generate_deliverables.py --paper 0005
+
+# Generate figures
 python generate_figures.py
+
+# Run QC audit (all 10 QC items, all 10 papers)
+python qc_audit.py
+
+# Run simulation from scratch for a paper (baseline -> smoke -> full)
+bash scripts/run_paper.sh 0005 full
 ```
+
+**Note on raw regression outputs:** Coefficient-level results per iteration are stored as `.txt` files in `regression_outputs/` and summarized in the `IterationDetail` sheet of each workbook. Standalone `regression_results_{id}.xlsx` files are not included — all their content appears in `Baseline_Regression` and `Coef_Stability_Summary` sheets of the main workbook.
 
 ---
 
-## Requirements
+## QC Notes
 
-See [`requirements.txt`](requirements.txt). Key packages: `numpy`, `pandas`, `scipy`,
-`scikit-learn`, `pyfixest` (Paper 0005), `statsmodels` (Paper 0017), `lightgbm`,
-`tensorflow`, `openpyxl`, `pyreadstat`. Python 3.11+ recommended.
+All 10 papers pass all 10 QC items from the operations manual (verified by `qc_audit.py`). Notable paper-specific findings documented in each paper's `confignotes.txt`:
+
+- **Fang2022 (0018):** Focal IV is borderline significant (p=0.096, one-star) by design in the most demanding FE spec. B_prop at 1% MCAR is ~93-100% (expected).
+- **Greene2021 (0019):** 313 singularity errors at high missingness + LD (regression estimation failed when removed observations caused near-collinearity). Documented as benign; minimum N_iters per combo is 22.
+- **Hu2025 (0021):** One null-byte file (MAR/1pct/aret/MILGBM/iter4) due to interrupted write. N_iters=29 for that combo; all others N_iters=30.
+- **Santamaria2024 (0022):** Focal IV p=0.052 (not significant at 5%). B_prop at 1% MCAR is 60-80% (expected given marginal baseline significance and N=394).
+- **Meyer2024 (0020) / Anderson2018 (0025):** MILGBM shows B_prop=0 at 1% MCAR for some key vars — Rubin's Rules SE inflation on small/borderline datasets, documented and expected.
