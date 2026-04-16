@@ -689,6 +689,14 @@ _PDF_SECTIONS = {
 }
 
 
+_FIELD_ALIASES = {
+    "Journal":       "Year & Journal",
+    "Full run end":  "Full run complete",
+    "Total runs":    "Total combinations",
+    "QC status":     "Note",
+}
+
+
 def generate_paper_info_pdf(paper_id: str, cfg: dict) -> None:
     """
     Generate Paper_Info_Record.pdf matching RA_MISSING_DATA.pdf Appendix A.
@@ -702,9 +710,9 @@ def generate_paper_info_pdf(paper_id: str, cfg: dict) -> None:
     paper_dir   = cfg["paper_dir"]
     info_path   = cfg["paper_info"]
 
-    # Load field→value dict from paper_info xlsx
+    # Load field→value dict from paper_info xlsx; normalise variant field names
     info_rows = _load_paper_info_rows(info_path)
-    info = {field: value for field, value in info_rows}
+    info = {_FIELD_ALIASES.get(field, field): value for field, value in info_rows}
 
     # Output paths
     pdf_local = paper_dir / "Paper_Info_Record.pdf"
@@ -770,21 +778,25 @@ def generate_paper_info_pdf(paper_id: str, cfg: dict) -> None:
         if not rows:
             continue
         story.append(Paragraph(section_name, section_style))
-        table_data = [["Field", "Value"]] + [[f, v] for f, v in rows]
+        # Wrap values in Paragraph so long strings word-wrap inside the cell
+        table_data = [["Field", "Value"]] + [
+            [Paragraph(f, normal), Paragraph(str(v), normal)] for f, v in rows
+        ]
         col_widths = [4.5 * cm, 12.5 * cm]
         t = Table(table_data, colWidths=col_widths, repeatRows=1)
         t.setStyle(tbl_style)
         story.append(t)
         story.append(Spacer(1, 0.2 * cm))
 
-    for dest in [pdf_local, pdf_root]:
-        doc = SimpleDocTemplate(
-            str(dest),
-            pagesize=A4,
-            leftMargin=2 * cm, rightMargin=2 * cm,
-            topMargin=2 * cm, bottomMargin=2.5 * cm,
-        )
-        doc.build(story, onFirstPage=_footer, onLaterPages=_footer)
+    # Build once (flowables are stateful; building twice produces an empty PDF)
+    doc = SimpleDocTemplate(
+        str(pdf_local),
+        pagesize=A4,
+        leftMargin=2 * cm, rightMargin=2 * cm,
+        topMargin=2 * cm, bottomMargin=2.5 * cm,
+    )
+    doc.build(story, onFirstPage=_footer, onLaterPages=_footer)
+    shutil.copy2(pdf_local, pdf_root)
 
     print(f"  PDF: Paper_Info_Record.pdf -> {pdf_local.parent.name}/ + root copy")
 
@@ -912,16 +924,23 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Generate AuthorYearReport deliverables")
     parser.add_argument("--paper", choices=list(PAPERS.keys()), default=None,
                         help="Process only this paper (default: all)")
+    parser.add_argument("--pdf-only", action="store_true",
+                        help="Regenerate only Paper_Info_Record PDFs (skip workbook processing)")
     args = parser.parse_args()
 
     papers_to_run = {args.paper: PAPERS[args.paper]} if args.paper else PAPERS
 
-    for paper_id, cfg in papers_to_run.items():
-        process_paper(paper_id, cfg)
+    if args.pdf_only:
+        for paper_id, cfg in papers_to_run.items():
+            print(f"\n=== Paper {paper_id} ({cfg['author_year']}) — PDF only ===")
+            generate_paper_info_pdf(paper_id, cfg)
+    else:
+        for paper_id, cfg in papers_to_run.items():
+            process_paper(paper_id, cfg)
 
-    print("\n--- Verification ---")
-    for paper_id, cfg in papers_to_run.items():
-        verify_output(paper_id, cfg)
+        print("\n--- Verification ---")
+        for paper_id, cfg in papers_to_run.items():
+            verify_output(paper_id, cfg)
 
     print("\nDone.")
 
