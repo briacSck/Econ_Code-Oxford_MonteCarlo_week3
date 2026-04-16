@@ -30,8 +30,8 @@ PAPERS = {
     "0005": {
         "label":      "0005",
         "long_title": "Mapping Entrepreneurial Inclusion\n(Stroube & Dushnitsky, ~2025 SMJ)",
-        "workbook":   REPO / "paper_analysis_output/Paper_0005_MappingEntrepreneurial/full_run/Stroube2025Report_0005.xlsx",
-        "figures":    REPO / "paper_analysis_output/Paper_0005_MappingEntrepreneurial/full_run/figures",
+        "workbook":   REPO / "paper_analysis_output/Stroube2025/full_run/Stroube2025_Report.xlsx",
+        "figures":    REPO / "paper_analysis_output/Stroube2025/full_run/figures",
         "focal_iv":   "log_pop_black_aa",
         "focal_coef": 0.0307,
         "focal_label":"log(Black/AA pop.)",
@@ -39,8 +39,8 @@ PAPERS = {
     "0017": {
         "label":      "0017",
         "long_title": "Status and Consensus\n(Stroube, 2024 SMJ)",
-        "workbook":   REPO / "paper_analysis_output/Paper_0017_StatusConsensus/full_run/Stroube2024Report_0017.xlsx",
-        "figures":    REPO / "paper_analysis_output/Paper_0017_StatusConsensus/full_run/figures",
+        "workbook":   REPO / "paper_analysis_output/Stroube2024/full_run/Stroube2024_Report.xlsx",
+        "figures":    REPO / "paper_analysis_output/Stroube2024/full_run/figures",
         "focal_iv":   "FLead",
         "focal_coef": 0.0468,
         "focal_label":"Female Lead (FLead)",

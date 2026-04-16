@@ -17,18 +17,16 @@ This repository contains a Monte Carlo simulation study evaluating how seven mis
 ├── RA_MISSING_DATA.pdf           # Operations manual v2.0 (authoritative specification)
 ├── qc_audit_results.csv          # QC audit output (all 10 papers x 10 checks)
 │
-├── paper_info_{id}.xlsx          # Input metadata for each paper (10 files, ids 0005-0025)
-│
-├── {AuthorYear}_Report.xlsx      # Root-level copies of main simulation workbooks (10 files)
-├── Paper_Info_Record_{AuthorYear}.pdf  # Root-level copies of Paper Info Records (10 files)
+├── Paper_Info_Record_{AuthorYear}.pdf  # Paper Info Records — root copies (10 files)
 │
 ├── scripts/
 │   └── run_paper.sh              # Runs baseline -> smoke -> full simulation for a single paper
 │
 └── paper_analysis_output/
-    └── Paper_{id}_{ShortName}/   # Per-paper output directory (10 directories)
+    └── {AuthorYear}/             # Per-paper output directory (10 directories)
         ├── DATA.csv                    # Preprocessed data used in simulation
         ├── Paper_Info_Record.pdf       # Paper Information Record (Appendix A template)
+        ├── paper_info.xlsx             # Input metadata (paper ID, variables, baseline values)
         ├── confignotes.txt             # Baseline validation log + setup decisions
         ├── scripts/
         │   └── simulation_{id}.py      # Paper-specific simulation script
@@ -117,7 +115,7 @@ python qc_audit.py
 bash scripts/run_paper.sh 0005 full
 ```
 
-**Note on raw regression outputs:** Coefficient-level results per iteration are stored as `.txt` files in `regression_outputs/` and summarized in the `IterationDetail` sheet of each workbook. Standalone `regression_results_{id}.xlsx` files are not included — all their content appears in `Baseline_Regression` and `Coef_Stability_Summary` sheets of the main workbook.
+**Note on raw regression outputs:** Coefficient-level results per iteration are stored as `.txt` files in `regression_outputs/` and summarized in the `IterationDetail` sheet of each workbook. All paper metadata (input for PDF and 00_PaperInfo sheet) lives in `paper_analysis_output/{AuthorYear}/paper_info.xlsx`.
 
 ---
 
